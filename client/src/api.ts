@@ -49,3 +49,14 @@ export async function getProgress(): Promise<Record<string, boolean>> {
   if (!r.ok) return {}
   return r.json()
 }
+
+export interface AppConfig {
+  hostRepoDir: string
+  editorScheme: string
+}
+
+export async function getConfig(): Promise<AppConfig> {
+  const r = await fetch('/api/config')
+  if (!r.ok) return { hostRepoDir: '', editorScheme: 'vscode' }
+  return r.json()
+}

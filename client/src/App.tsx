@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Course, getChapters, getProgress } from './api'
+import { AppConfig, Course, getChapters, getConfig, getProgress } from './api'
 import { Selection } from './types'
 import ChapterTree from './components/ChapterTree'
 import LessonView from './components/LessonView'
@@ -9,6 +9,7 @@ export default function App() {
   const [course, setCourse] = useState<Course | null>(null)
   const [selection, setSelection] = useState<Selection | null>(null)
   const [progress, setProgress] = useState<Record<string, boolean>>({})
+  const [config, setConfig] = useState<AppConfig>({ hostRepoDir: '', editorScheme: 'vscode' })
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -21,6 +22,9 @@ export default function App() {
       .catch((e) => setError(String(e)))
     getProgress()
       .then(setProgress)
+      .catch(() => {})
+    getConfig()
+      .then(setConfig)
       .catch(() => {})
   }, [])
 
@@ -58,7 +62,7 @@ export default function App() {
         />
         <main className="flex min-h-0 flex-1 flex-col">
           <LessonView selection={selection} />
-          <CheckPanel crate={selection.chapter.crate} onResult={markProgress} />
+          <CheckPanel crate={selection.chapter.crate} config={config} onResult={markProgress} />
         </main>
       </div>
     </div>

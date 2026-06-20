@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import confetti from 'canvas-confetti'
-import { CheckResult, check } from '../api'
+import { AppConfig, CheckResult, check } from '../api'
 
 // Assertion diffs (left/right) print to cargo's stdout; compile errors print to
 // stderr. Show both so the learner sees whatever actually went wrong.
@@ -39,13 +39,20 @@ function CheckOutput({ text }: { text: string }) {
 
 export default function CheckPanel({
   crate,
+  config,
   onResult,
 }: {
   crate: string | null
+  config: AppConfig
   onResult: (crate: string, pass: boolean) => void
 }) {
   const [running, setRunning] = useState(false)
   const [result, setResult] = useState<CheckResult | null>(null)
+
+  const editorUrl =
+    crate && config.hostRepoDir
+      ? `${config.editorScheme}://file${config.hostRepoDir}/chapters/${crate}/src/lib.rs`
+      : null
 
   async function runCheck() {
     if (!crate) return
@@ -83,6 +90,15 @@ export default function CheckPanel({
           </button>
           {crate && (
             <code className="font-mono text-xs text-muted">cargo test -p {crate}</code>
+          )}
+          {editorUrl && (
+            <a
+              href={editorUrl}
+              className="rounded-md border border-edge px-2 py-1 text-xs font-medium text-crab transition hover:border-rust/60 hover:text-paper"
+              title="Open chapters/{crate}/src/lib.rs in your editor"
+            >
+              ‹/› Open code
+            </a>
           )}
           {result && (
             <span

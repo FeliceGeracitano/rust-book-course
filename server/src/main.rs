@@ -147,6 +147,12 @@ fn handle(
         ["api", "progress"] if is_get => {
             json(serde_json::to_string(progress).unwrap_or_else(|_| "{}".to_string()))
         }
+        ["api", "config"] if is_get => {
+            // Lets the client build an editor deep-link to the file on the HOST.
+            let host_repo_dir = env::var("HOST_REPO_DIR").unwrap_or_default();
+            let editor_scheme = env::var("EDITOR_SCHEME").unwrap_or_else(|_| "vscode".to_string());
+            json(serde_json::json!({ "hostRepoDir": host_repo_dir, "editorScheme": editor_scheme }).to_string())
+        }
         _ if is_get => serve_static(client_dir, path),
         _ => not_found(),
     }

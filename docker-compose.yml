@@ -15,3 +15,7 @@ services:
       CHAPTERS_DIR: /app/chapters
       CARGO_TARGET_DIR: /cargo-target
       PORT: "8080"
+      # Used only to build an "open in editor" deep-link to the file on your host.
+      # ${PWD} is the repo dir when you run `docker compose up`.
+      HOST_REPO_DIR: ${PWD}
+      EDITOR_SCHEME: ${EDITOR_SCHEME:-vscode}
