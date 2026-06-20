@@ -1,0 +1,14 @@
+# Rust
+/target
+**/target
+Cargo.lock
+
+# Node / client (Plan #2)
+node_modules
+client/dist
+
+# OS / editor
+.DS_Store
+*.swp
+.idea
+.vscode

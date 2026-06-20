@@ -1,0 +1,29 @@
+[workspace]
+resolver = "2"
+members = [
+    "ch01_getting_started",
+    "ch02_guessing_game",
+    "ch03_common_concepts",
+    "ch04_ownership",
+    "ch05_structs",
+    "ch06_enums_pattern_matching",
+    "ch07_packages_crates_modules",
+    "ch08_collections",
+    "ch09_error_handling",
+    "ch10_generics_traits_lifetimes",
+    "ch11_testing",
+    "ch12_io_project",
+    "ch13_iterators_closures",
+    "ch14_cargo_crates_io",
+    "ch15_smart_pointers",
+    "ch16_concurrency",
+    "ch17_async",
+    "ch18_oop",
+    "ch19_patterns_matching",
+    "ch20_advanced_features",
+    "ch21_web_server",
+]
+
+[workspace.package]
+edition = "2024"
+version = "0.1.0"
