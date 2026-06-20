@@ -4,11 +4,13 @@ import remarkGfm from 'remark-gfm'
 import { getLesson } from '../api'
 import { Selection } from '../types'
 import CodeBlock from './CodeBlock'
+import { vizFor } from './viz/registry'
 
 type Status = 'loading' | 'ok' | 'missing'
 
 export default function LessonView({ selection }: { selection: Selection }) {
   const { chapter, sub } = selection
+  const Viz = vizFor(chapter.crate)
   const [markdown, setMarkdown] = useState('')
   const [status, setStatus] = useState<Status>('loading')
 
@@ -38,6 +40,8 @@ export default function LessonView({ selection }: { selection: Selection }) {
         <div className="mb-4 font-mono text-xs uppercase tracking-wider text-crab">
           Chapter {chapter.number} · {chapter.title}
         </div>
+
+        {Viz && <Viz />}
 
         {status === 'loading' && <p className="text-muted">Loading lesson…</p>}
 
