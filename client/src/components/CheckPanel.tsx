@@ -11,6 +11,32 @@ function testOutput(r: CheckResult): string {
     .join('\n\n')
 }
 
+// Color each line by meaning so the signal (the diff, what FAILED) pops out of
+// the noise (cargo's progress chatter).
+function lineClass(line: string): string {
+  const t = line.trimStart()
+  if (/^left:/.test(t)) return 'text-rust-bright'
+  if (/^right:/.test(t)) return 'text-ok'
+  if (/^assertion|panicked at/.test(t)) return 'text-crab'
+  if (/\bFAILED\b/.test(line) || /^error/.test(t)) return 'text-rust-bright font-semibold'
+  if (/\.\.\. ok\b/.test(line) || /^test result: ok/.test(t)) return 'text-ok'
+  if (/^(----|failures:|running |test result|note:|warning)/.test(t)) return 'text-muted'
+  if (/^(Compiling|Finished|Running)/.test(t)) return 'text-muted'
+  return 'text-paper/75'
+}
+
+function CheckOutput({ text }: { text: string }) {
+  return (
+    <div className="max-h-72 overflow-auto rounded-lg border border-edge bg-ink p-3 font-mono text-xs leading-relaxed">
+      {text.split('\n').map((ln, i) => (
+        <div key={i} className={`whitespace-pre-wrap ${lineClass(ln)}`}>
+          {ln || ' '}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function CheckPanel({
   crate,
   onResult,
@@ -46,7 +72,7 @@ export default function CheckPanel({
 
   return (
     <div className="border-t border-edge bg-ink-soft">
-      <div className="mx-auto flex max-w-3xl flex-col gap-3 px-8 py-4">
+      <div className="flex w-full flex-col gap-3 px-6 py-4">
         <div className="flex items-center gap-3">
           <button
             disabled={!crate || running}
@@ -69,9 +95,7 @@ export default function CheckPanel({
           )}
         </div>
         {result && !result.pass && testOutput(result) && (
-          <pre className="max-h-64 overflow-auto rounded-lg border border-edge bg-ink p-3 font-mono text-xs leading-relaxed text-paper">
-            {testOutput(result)}
-          </pre>
+          <CheckOutput text={testOutput(result)} />
         )}
       </div>
     </div>
