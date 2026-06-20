@@ -2,6 +2,15 @@ import { useState } from 'react'
 import confetti from 'canvas-confetti'
 import { CheckResult, check } from '../api'
 
+// Assertion diffs (left/right) print to cargo's stdout; compile errors print to
+// stderr. Show both so the learner sees whatever actually went wrong.
+function testOutput(r: CheckResult): string {
+  return [r.stdout, r.stderr]
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .join('\n\n')
+}
+
 export default function CheckPanel({
   crate,
   onResult,
@@ -59,9 +68,9 @@ export default function CheckPanel({
             </span>
           )}
         </div>
-        {result && !result.pass && (result.stderr || result.stdout) && (
-          <pre className="max-h-48 overflow-auto rounded-lg border border-edge bg-ink p-3 font-mono text-xs text-muted">
-            {result.stderr || result.stdout}
+        {result && !result.pass && testOutput(result) && (
+          <pre className="max-h-64 overflow-auto rounded-lg border border-edge bg-ink p-3 font-mono text-xs leading-relaxed text-paper">
+            {testOutput(result)}
           </pre>
         )}
       </div>

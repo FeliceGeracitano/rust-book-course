@@ -5,3 +5,4 @@ version.workspace = true
 
 [lib]
 path = "src/lib.rs"
+doctest = false

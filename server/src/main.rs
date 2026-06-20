@@ -96,7 +96,7 @@ fn run_check(chapters_dir: &str, krate: &str) -> (bool, String, String) {
         .status();
 
     match Command::new("cargo")
-        .args(["test", "-p", krate, "--quiet"])
+        .args(["test", "-p", krate])
         .current_dir(chapters_dir)
         .output()
     {
