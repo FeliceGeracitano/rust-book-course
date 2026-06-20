@@ -12,3 +12,6 @@ client/dist
 *.swp
 .idea
 .vscode
+
+# Tooling
+.serena/

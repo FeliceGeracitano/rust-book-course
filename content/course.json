@@ -1,0 +1,135 @@
+{
+  "title": "Rust Book Course",
+  "chapters": [
+    { "id": "ch01_getting_started", "number": 1, "title": "Getting Started", "crate": "ch01_getting_started",
+      "subchapters": [
+        { "id": "installation", "number": "1.1", "title": "Installation" },
+        { "id": "hello_world", "number": "1.2", "title": "Hello, World!" },
+        { "id": "hello_cargo", "number": "1.3", "title": "Hello, Cargo!" } ] },
+    { "id": "ch02_guessing_game", "number": 2, "title": "Programming a Guessing Game", "crate": "ch02_guessing_game",
+      "subchapters": [] },
+    { "id": "ch03_common_concepts", "number": 3, "title": "Common Programming Concepts", "crate": "ch03_common_concepts",
+      "subchapters": [
+        { "id": "variables_mutability", "number": "3.1", "title": "Variables and Mutability" },
+        { "id": "data_types", "number": "3.2", "title": "Data Types" },
+        { "id": "functions", "number": "3.3", "title": "Functions" },
+        { "id": "comments", "number": "3.4", "title": "Comments" },
+        { "id": "control_flow", "number": "3.5", "title": "Control Flow" } ] },
+    { "id": "ch04_ownership", "number": 4, "title": "Understanding Ownership", "crate": "ch04_ownership",
+      "subchapters": [
+        { "id": "what_is_ownership", "number": "4.1", "title": "What is Ownership?" },
+        { "id": "references_borrowing", "number": "4.2", "title": "References and Borrowing" },
+        { "id": "slices", "number": "4.3", "title": "The Slice Type" } ] },
+    { "id": "ch05_structs", "number": 5, "title": "Using Structs to Structure Related Data", "crate": "ch05_structs",
+      "subchapters": [
+        { "id": "defining_structs", "number": "5.1", "title": "Defining and Instantiating Structs" },
+        { "id": "example_program", "number": "5.2", "title": "An Example Program Using Structs" },
+        { "id": "methods", "number": "5.3", "title": "Method Syntax" } ] },
+    { "id": "ch06_enums_pattern_matching", "number": 6, "title": "Enums and Pattern Matching", "crate": "ch06_enums_pattern_matching",
+      "subchapters": [
+        { "id": "defining_enum", "number": "6.1", "title": "Defining an Enum" },
+        { "id": "match", "number": "6.2", "title": "The match Control Flow Construct" },
+        { "id": "if_let_let_else", "number": "6.3", "title": "Concise Control Flow with if let and let...else" } ] },
+    { "id": "ch07_packages_crates_modules", "number": 7, "title": "Packages, Crates, and Modules", "crate": "ch07_packages_crates_modules",
+      "subchapters": [
+        { "id": "packages_crates", "number": "7.1", "title": "Packages and Crates" },
+        { "id": "modules_scope_privacy", "number": "7.2", "title": "Control Scope and Privacy with Modules" },
+        { "id": "paths", "number": "7.3", "title": "Paths for Referring to an Item in the Module Tree" },
+        { "id": "use_keyword", "number": "7.4", "title": "Bringing Paths Into Scope with use" },
+        { "id": "separating_files", "number": "7.5", "title": "Separating Modules into Different Files" } ] },
+    { "id": "ch08_collections", "number": 8, "title": "Common Collections", "crate": "ch08_collections",
+      "subchapters": [
+        { "id": "vectors", "number": "8.1", "title": "Storing Lists of Values with Vectors" },
+        { "id": "strings", "number": "8.2", "title": "Storing UTF-8 Encoded Text with Strings" },
+        { "id": "hash_maps", "number": "8.3", "title": "Storing Keys with Associated Values in Hash Maps" } ] },
+    { "id": "ch09_error_handling", "number": 9, "title": "Error Handling", "crate": "ch09_error_handling",
+      "subchapters": [
+        { "id": "panic", "number": "9.1", "title": "Unrecoverable Errors with panic!" },
+        { "id": "result", "number": "9.2", "title": "Recoverable Errors with Result" },
+        { "id": "to_panic_or_not", "number": "9.3", "title": "To panic! or Not to panic!" } ] },
+    { "id": "ch10_generics_traits_lifetimes", "number": 10, "title": "Generic Types, Traits, and Lifetimes", "crate": "ch10_generics_traits_lifetimes",
+      "subchapters": [
+        { "id": "generic_data_types", "number": "10.1", "title": "Generic Data Types" },
+        { "id": "traits", "number": "10.2", "title": "Defining Shared Behavior with Traits" },
+        { "id": "lifetimes", "number": "10.3", "title": "Validating References with Lifetimes" } ] },
+    { "id": "ch11_testing", "number": 11, "title": "Writing Automated Tests", "crate": "ch11_testing",
+      "subchapters": [
+        { "id": "how_to_write_tests", "number": "11.1", "title": "How to Write Tests" },
+        { "id": "controlling_tests", "number": "11.2", "title": "Controlling How Tests Are Run" },
+        { "id": "test_organization", "number": "11.3", "title": "Test Organization" } ] },
+    { "id": "ch12_io_project", "number": 12, "title": "An I/O Project: Building a Command Line Program", "crate": "ch12_io_project",
+      "subchapters": [
+        { "id": "accepting_args", "number": "12.1", "title": "Accepting Command Line Arguments" },
+        { "id": "reading_file", "number": "12.2", "title": "Reading a File" },
+        { "id": "refactoring", "number": "12.3", "title": "Refactoring to Improve Modularity and Error Handling" },
+        { "id": "tdd", "number": "12.4", "title": "Adding Functionality with Test Driven Development" },
+        { "id": "env_vars", "number": "12.5", "title": "Working with Environment Variables" },
+        { "id": "stderr", "number": "12.6", "title": "Redirecting Errors to Standard Error" } ] },
+    { "id": "ch13_iterators_closures", "number": 13, "title": "Functional Language Features: Iterators and Closures", "crate": "ch13_iterators_closures",
+      "subchapters": [
+        { "id": "closures", "number": "13.1", "title": "Closures" },
+        { "id": "iterators", "number": "13.2", "title": "Processing a Series of Items with Iterators" },
+        { "id": "improving_io_project", "number": "13.3", "title": "Improving Our I/O Project" },
+        { "id": "performance", "number": "13.4", "title": "Performance: Loops vs. Iterators" } ] },
+    { "id": "ch14_cargo_crates_io", "number": 14, "title": "More about Cargo and Crates.io", "crate": "ch14_cargo_crates_io",
+      "subchapters": [
+        { "id": "release_profiles", "number": "14.1", "title": "Customizing Builds with Release Profiles" },
+        { "id": "publishing", "number": "14.2", "title": "Publishing a Crate to Crates.io" },
+        { "id": "workspaces", "number": "14.3", "title": "Cargo Workspaces" },
+        { "id": "cargo_install", "number": "14.4", "title": "Installing Binaries with cargo install" },
+        { "id": "custom_commands", "number": "14.5", "title": "Extending Cargo with Custom Commands" } ] },
+    { "id": "ch15_smart_pointers", "number": 15, "title": "Smart Pointers", "crate": "ch15_smart_pointers",
+      "subchapters": [
+        { "id": "box", "number": "15.1", "title": "Using Box<T> to Point to Data on the Heap" },
+        { "id": "deref", "number": "15.2", "title": "Treating Smart Pointers Like Regular References" },
+        { "id": "drop", "number": "15.3", "title": "Running Code on Cleanup with the Drop Trait" },
+        { "id": "rc", "number": "15.4", "title": "Rc<T>, the Reference Counted Smart Pointer" },
+        { "id": "refcell", "number": "15.5", "title": "RefCell<T> and the Interior Mutability Pattern" },
+        { "id": "reference_cycles", "number": "15.6", "title": "Reference Cycles Can Leak Memory" } ] },
+    { "id": "ch16_concurrency", "number": 16, "title": "Fearless Concurrency", "crate": "ch16_concurrency",
+      "subchapters": [
+        { "id": "threads", "number": "16.1", "title": "Using Threads to Run Code Simultaneously" },
+        { "id": "message_passing", "number": "16.2", "title": "Transfer Data Between Threads with Message Passing" },
+        { "id": "shared_state", "number": "16.3", "title": "Shared-State Concurrency" },
+        { "id": "send_sync", "number": "16.4", "title": "Extensible Concurrency with Send and Sync" } ] },
+    { "id": "ch17_async", "number": 17, "title": "Fundamentals of Asynchronous Programming", "crate": "ch17_async",
+      "subchapters": [
+        { "id": "futures_async_syntax", "number": "17.1", "title": "Futures and the Async Syntax" },
+        { "id": "applying_concurrency", "number": "17.2", "title": "Applying Concurrency with Async" },
+        { "id": "many_futures", "number": "17.3", "title": "Working With Any Number of Futures" },
+        { "id": "streams", "number": "17.4", "title": "Streams: Futures in Sequence" },
+        { "id": "async_traits", "number": "17.5", "title": "A Closer Look at the Traits for Async" },
+        { "id": "futures_tasks_threads", "number": "17.6", "title": "Futures, Tasks, and Threads" } ] },
+    { "id": "ch18_oop", "number": 18, "title": "Object Oriented Programming Features", "crate": "ch18_oop",
+      "subchapters": [
+        { "id": "characteristics", "number": "18.1", "title": "Characteristics of Object-Oriented Languages" },
+        { "id": "trait_objects", "number": "18.2", "title": "Using Trait Objects to Abstract over Shared Behavior" },
+        { "id": "oo_design_pattern", "number": "18.3", "title": "Implementing an Object-Oriented Design Pattern" } ] },
+    { "id": "ch19_patterns_matching", "number": 19, "title": "Patterns and Matching", "crate": "ch19_patterns_matching",
+      "subchapters": [
+        { "id": "places_patterns", "number": "19.1", "title": "All the Places Patterns Can Be Used" },
+        { "id": "refutability", "number": "19.2", "title": "Refutability: Whether a Pattern Might Fail to Match" },
+        { "id": "pattern_syntax", "number": "19.3", "title": "Pattern Syntax" } ] },
+    { "id": "ch20_advanced_features", "number": 20, "title": "Advanced Features", "crate": "ch20_advanced_features",
+      "subchapters": [
+        { "id": "unsafe", "number": "20.1", "title": "Unsafe Rust" },
+        { "id": "advanced_traits", "number": "20.2", "title": "Advanced Traits" },
+        { "id": "advanced_types", "number": "20.3", "title": "Advanced Types" },
+        { "id": "advanced_fns_closures", "number": "20.4", "title": "Advanced Functions and Closures" },
+        { "id": "macros", "number": "20.5", "title": "Macros" } ] },
+    { "id": "ch21_web_server", "number": 21, "title": "Final Project: Building a Multithreaded Web Server", "crate": "ch21_web_server",
+      "subchapters": [
+        { "id": "single_threaded", "number": "21.1", "title": "Building a Single-Threaded Web Server" },
+        { "id": "multithreaded", "number": "21.2", "title": "From Single-Threaded to Multithreaded Server" },
+        { "id": "graceful_shutdown", "number": "21.3", "title": "Graceful Shutdown and Cleanup" } ] },
+    { "id": "appendix", "number": 22, "title": "Appendix", "crate": null,
+      "subchapters": [
+        { "id": "a_keywords", "number": "A", "title": "Keywords" },
+        { "id": "b_operators", "number": "B", "title": "Operators and Symbols" },
+        { "id": "c_derivable_traits", "number": "C", "title": "Derivable Traits" },
+        { "id": "d_dev_tools", "number": "D", "title": "Useful Development Tools" },
+        { "id": "e_editions", "number": "E", "title": "Editions" },
+        { "id": "f_translations", "number": "F", "title": "Translations of the Book" },
+        { "id": "g_nightly", "number": "G", "title": "How Rust is Made and Nightly Rust" } ] }
+  ]
+}
