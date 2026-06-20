@@ -7,7 +7,8 @@
         { "id": "hello_world", "number": "1.2", "title": "Hello, World!" },
         { "id": "hello_cargo", "number": "1.3", "title": "Hello, Cargo!" } ] },
     { "id": "ch02_guessing_game", "number": 2, "title": "Programming a Guessing Game", "crate": "ch02_guessing_game",
-      "subchapters": [] },
+      "subchapters": [
+        { "id": "guessing_game", "number": "2.1", "title": "Building the Guessing Game" } ] },
     { "id": "ch03_common_concepts", "number": 3, "title": "Common Programming Concepts", "crate": "ch03_common_concepts",
       "subchapters": [
         { "id": "variables_mutability", "number": "3.1", "title": "Variables and Mutability" },
