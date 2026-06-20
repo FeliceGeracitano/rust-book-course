@@ -1,0 +1,51 @@
+// Typed client for the Rust server's JSON API. Field names mirror
+// content/course.json and the server's check/progress responses.
+
+export interface Subchapter {
+  id: string
+  number: string
+  title: string
+}
+
+export interface Chapter {
+  id: string
+  number: number
+  title: string
+  crate: string | null
+  subchapters: Subchapter[]
+}
+
+export interface Course {
+  title: string
+  chapters: Chapter[]
+}
+
+export interface CheckResult {
+  pass: boolean
+  stdout: string
+  stderr: string
+}
+
+export async function getChapters(): Promise<Course> {
+  const r = await fetch('/api/chapters')
+  if (!r.ok) throw new Error('failed to load chapters')
+  return r.json()
+}
+
+export async function getLesson(crate: string, sub: string): Promise<string> {
+  const r = await fetch(`/api/lesson/${crate}/${sub}`)
+  if (!r.ok) throw new Error('lesson not found')
+  return r.text()
+}
+
+export async function check(crate: string): Promise<CheckResult> {
+  const r = await fetch(`/api/check/${crate}`, { method: 'POST' })
+  if (!r.ok) throw new Error('check failed to run')
+  return r.json()
+}
+
+export async function getProgress(): Promise<Record<string, boolean>> {
+  const r = await fetch('/api/progress')
+  if (!r.ok) return {}
+  return r.json()
+}
