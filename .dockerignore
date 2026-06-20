@@ -1,0 +1,6 @@
+**/target
+**/node_modules
+client/dist
+.git
+.serena
+**/.DS_Store

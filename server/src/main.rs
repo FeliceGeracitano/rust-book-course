@@ -87,6 +87,14 @@ fn serve_static(client_dir: &str, url_path: &str) -> Body {
 
 /// Run the chapter's tests and report pass/fail with captured output.
 fn run_check(chapters_dir: &str, krate: &str) -> (bool, String, String) {
+    // On macOS Docker bind mounts, a freshly-edited file's mtime can lag behind
+    // its content, so cargo's mtime fingerprint may skip a recompile and reuse a
+    // stale test binary. Bumping the mtime first forces cargo to see the change.
+    let crate_dir = Path::new(chapters_dir).join(krate);
+    let _ = Command::new("find")
+        .args([crate_dir.to_string_lossy().as_ref(), "-name", "*.rs", "-exec", "touch", "{}", "+"])
+        .status();
+
     match Command::new("cargo")
         .args(["test", "-p", krate, "--quiet"])
         .current_dir(chapters_dir)

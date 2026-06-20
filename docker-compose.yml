@@ -1,0 +1,17 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    # Mount the editable source so your terminal edits + `cargo test` are live
+    # without rebuilding the image. CARGO_TARGET_DIR points off the mount so the
+    # container's Linux build artifacts never clash with host (macOS) ones.
+    volumes:
+      - ./chapters:/app/chapters
+      - ./content:/app/content
+    environment:
+      CLIENT_DIR: /app/client/dist
+      CONTENT_DIR: /app/content
+      CHAPTERS_DIR: /app/chapters
+      CARGO_TARGET_DIR: /cargo-target
+      PORT: "8080"
