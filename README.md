@@ -13,8 +13,8 @@ the actual learning happens in `chapters/`.
 |------|------|
 | `chapters/` | One Cargo crate per chapter — the Rust you edit. Make the tests pass. |
 | `content/`  | Lesson prose (`content/<crate>/*.md`) + `course.json` (the table of contents). |
-| `server/`   | Rust `tiny_http` server (added in Plan #2). |
-| `client/`   | React + Vite UI (added in Plan #2). |
+| `server/`   | Rust `tiny_http` server: serves the UI, the lessons, and runs your tests. |
+| `client/`   | React + Vite UI (chapter tree, lessons, **Check** button). |
 
 ## Learn in the terminal (works today)
 
@@ -28,10 +28,19 @@ Exercises ship **failing on purpose** — your job is to make them green.
 
 ## Run the full app
 
-Added in Plan #2:
-
 ```bash
 docker compose up   # -> http://localhost:8080
+```
+
+Open the page, pick a chapter, edit its crate in `chapters/`, and hit **Check** —
+the server runs `cargo test` for that chapter and shows pass/fail. `chapters/` and
+`content/` are mounted, so your edits are live without a rebuild. Only Docker is
+required; a local Rust install is optional.
+
+### Develop the UI
+
+```bash
+cd client && npm install && npm run dev   # Vite on :5173, proxies /api to :8080
 ```
 
 ## Credits & attribution
