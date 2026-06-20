@@ -33,3 +33,17 @@ Added in Plan #2:
 ```bash
 docker compose up   # -> http://localhost:8080
 ```
+
+## Credits & attribution
+
+This course is **derived from [The Rust Programming Language](https://doc.rust-lang.org/book/)**
+("the Book") — its chapter structure, topic order, and learning progression all come
+from there. The Book is written and maintained by the Rust team and contributors.
+
+This repo is an **unofficial** companion: it reorganizes the Book's curriculum into
+hands-on, test-driven exercises plus a small local UI. It is not affiliated with or
+endorsed by the Rust project. For the authoritative text, always read the Book itself:
+<https://doc.rust-lang.org/book/>.
+
+The Book is licensed under **MIT OR Apache-2.0**; any prose adapted from it here is used
+under those terms. See the Book's repository: <https://github.com/rust-lang/book>.
