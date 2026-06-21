@@ -11,18 +11,20 @@ type Status = 'loading' | 'ok' | 'missing'
 export default function LessonView({ selection }: { selection: Selection }) {
   const { chapter, sub } = selection
   const Viz = vizFor(chapter.crate)
+  // Content dirs are named by crate; the appendix has no crate so it uses its id.
+  const contentKey = chapter.crate ?? chapter.id
   const [markdown, setMarkdown] = useState('')
   const [status, setStatus] = useState<Status>('loading')
 
   useEffect(() => {
-    if (!chapter.crate || !sub) {
+    if (!sub) {
       setStatus('missing')
       setMarkdown('')
       return
     }
     setStatus('loading')
     let alive = true
-    getLesson(chapter.crate, sub.id)
+    getLesson(contentKey, sub.id)
       .then((md) => {
         if (!alive) return
         setMarkdown(md)
@@ -32,7 +34,7 @@ export default function LessonView({ selection }: { selection: Selection }) {
     return () => {
       alive = false
     }
-  }, [chapter.crate, sub?.id])
+  }, [contentKey, sub?.id])
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto px-8 py-6">
@@ -49,9 +51,15 @@ export default function LessonView({ selection }: { selection: Selection }) {
           <div className="prose-rust">
             <h1>{sub ? `${sub.number} ${sub.title}` : chapter.title}</h1>
             <p className="text-muted">
-              Lesson text for this section is coming soon. You can still work the
-              exercise — open the chapter crate in <code>chapters/{chapter.crate}</code>,
-              make its tests pass, then hit <strong>Check</strong> below.
+              {chapter.crate ? (
+                <>
+                  Lesson text for this section is coming soon. You can still work the
+                  exercise — edit <code>chapters/{chapter.crate}/src/lib.rs</code>, make
+                  its tests pass, then hit <strong>Check</strong>.
+                </>
+              ) : (
+                <>This is reference reading — content coming soon.</>
+              )}
             </p>
           </div>
         )}
