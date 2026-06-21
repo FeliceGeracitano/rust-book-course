@@ -43,6 +43,19 @@ required; a local Rust install is optional.
 cd client && npm install && npm run dev   # Vite on :5173, proxies /api to :8080
 ```
 
+## Roadmap / TODO
+
+Tackle one at a time:
+
+- [ ] **Resizable editor pane** — drag the divider between the lesson and the editor.
+- [ ] **Rust autocomplete in Monaco** — language server / IntelliSense for the editor.
+- [ ] **Resizable / draggable Check + Clippy output** — drag to grow the results panel.
+- [ ] **Chapter reset** — "revert to original" to restart a chapter. Keep a pristine
+      original exercise file untouched and edit a separate working copy, so reset just
+      deletes the working copy and restores the original.
+- [ ] **Collapsible left sidebar** — hide/show the chapter tree to free width.
+- [ ] **Highlight Clippy output** like the Check output (color-code lint notes).
+
 ## Credits & attribution
 
 This course is **derived from [The Rust Programming Language](https://doc.rust-lang.org/book/)**
