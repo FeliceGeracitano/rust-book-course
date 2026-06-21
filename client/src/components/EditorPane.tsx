@@ -292,31 +292,36 @@ export default function EditorPane({
         ) : (
           <span className="text-muted/60">saved</span>
         )}
-        {lspReady && (
-          <span className="text-ok" title="rust-analyzer connected">
-            ⚡ rust-analyzer
-          </span>
-        )}
-        <button
-          onClick={doReset}
-          className={`ml-auto rounded-md border px-2 py-0.5 font-medium transition ${
-            confirmReset
-              ? 'border-rust/60 text-rust-bright'
-              : 'border-edge text-muted hover:text-paper'
-          }`}
-          title="Restore the original exercise (discards your edits)"
-        >
-          {confirmReset ? 'Confirm reset' : '↺ Reset'}
-        </button>
-        {editorUrl && (
-          <a
-            href={editorUrl}
-            className="rounded-md border border-edge px-2 py-0.5 font-medium text-crab transition hover:text-paper"
-            title="Open this file in your local editor"
+        <div className="ml-auto flex items-center gap-2">
+          {lspReady && (
+            <span
+              className="text-ok"
+              title="rust-analyzer is connected — semantic autocomplete, hover types, and live error checks as you type"
+            >
+              ⚡ rust-analyzer
+            </span>
+          )}
+          <button
+            onClick={doReset}
+            className={`rounded-md border px-2 py-0.5 font-medium transition ${
+              confirmReset
+                ? 'border-rust/60 text-rust-bright'
+                : 'border-edge text-muted hover:text-paper'
+            }`}
+            title="Restore the original exercise (discards your edits)"
           >
-            ‹/› editor ↗
-          </a>
-        )}
+            {confirmReset ? 'Confirm reset' : '↺ Reset'}
+          </button>
+          {editorUrl && (
+            <a
+              href={editorUrl}
+              className="rounded-md border border-edge px-2 py-0.5 font-medium text-crab transition hover:text-paper"
+              title="Open this file in your local editor"
+            >
+              ‹/› editor ↗
+            </a>
+          )}
+        </div>
       </div>
 
       <div className="min-h-0 flex-1">
