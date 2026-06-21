@@ -116,6 +116,29 @@ fn lib_path(chapters_dir: &str, krate: &str) -> PathBuf {
     Path::new(chapters_dir).join(krate).join("src").join("lib.rs")
 }
 
+/// The working `src/lib.rs` is git-ignored (so a learner's edits never show up in
+/// git). Materialize it from the committed pristine `.exercise.rs` when missing,
+/// so cargo always has something to compile.
+fn ensure_working_files(chapters_dir: &str) {
+    let Ok(entries) = fs::read_dir(chapters_dir) else {
+        return;
+    };
+    for entry in entries.flatten() {
+        let dir = entry.path();
+        if !dir.is_dir() {
+            continue;
+        }
+        let original = dir.join(".exercise.rs");
+        let lib = dir.join("src").join("lib.rs");
+        if original.exists() && !lib.exists() {
+            if let Some(parent) = lib.parent() {
+                let _ = fs::create_dir_all(parent);
+            }
+            let _ = fs::copy(&original, &lib);
+        }
+    }
+}
+
 fn handle(
     method: &Method,
     segs: &[&str],
@@ -194,6 +217,22 @@ fn handle(
                 Err(_) => not_found(),
             }
         }
+        ["api", "reset", krate] if is_post => {
+            // Restore the pristine exercise (.exercise.rs is never edited) over the
+            // learner's working src/lib.rs, and return the restored content.
+            if !valid_seg(krate) {
+                return not_found();
+            }
+            let original = Path::new(chapters_dir).join(krate).join(".exercise.rs");
+            match fs::read_to_string(&original) {
+                Ok(content) => match fs::write(lib_path(chapters_dir, krate), &content) {
+                    Ok(_) => Response::from_string(content)
+                        .with_header(header("text/plain; charset=utf-8")),
+                    Err(e) => Response::from_string(e.to_string()).with_status_code(500),
+                },
+                Err(_) => not_found(),
+            }
+        }
         ["api", "progress"] if is_get => {
             json(serde_json::to_string(progress).unwrap_or_else(|_| "{}".to_string()))
         }
@@ -218,6 +257,8 @@ fn main() {
     let content_dir = env_or("CONTENT_DIR", "content");
     let chapters_dir = env_or("CHAPTERS_DIR", "chapters");
     let addr = format!("{bind}:{port}");
+
+    ensure_working_files(&chapters_dir);
 
     let server = Server::http(&addr).expect("failed to bind address");
     println!("rust-book-course server → http://{addr}");

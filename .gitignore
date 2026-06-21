@@ -15,3 +15,7 @@ client/dist
 
 # Tooling
 .serena/
+
+# Learner's working files — the canonical exercise lives in chapters/*/.exercise.rs;
+# src/lib.rs is materialized from it and edited freely, so we don't track it.
+chapters/*/src/lib.rs

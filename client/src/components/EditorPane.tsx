@@ -10,6 +10,7 @@ import {
   clippy,
   getFile,
   getSolution,
+  resetChapter,
   saveFile,
 } from '../api'
 import { CheckOutput, testOutput } from './output'
@@ -52,6 +53,7 @@ export default function EditorPane({
   const [solution, setSolution] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<Tab>('output')
   const [loadError, setLoadError] = useState(false)
+  const [confirmReset, setConfirmReset] = useState(false)
   const [editorReady, setEditorReady] = useState(false)
   const [editorFailed, setEditorFailed] = useState(false)
   const [panelHeight, setPanelHeight] = useState(() => {
@@ -97,6 +99,7 @@ export default function EditorPane({
     setActiveTab('output')
     setLoadError(false)
     setBusy('idle')
+    setConfirmReset(false)
     if (!crate) {
       setCode('')
       setSaved('')
@@ -152,6 +155,13 @@ export default function EditorPane({
     const t = setTimeout(() => setEditorFailed(true), MONACO_TIMEOUT_MS)
     return () => clearTimeout(t)
   }, [editorReady])
+
+  // Disarm the reset confirmation if not followed through quickly.
+  useEffect(() => {
+    if (!confirmReset) return
+    const t = setTimeout(() => setConfirmReset(false), 3000)
+    return () => clearTimeout(t)
+  }, [confirmReset])
 
   if (!crate) {
     return (
@@ -209,6 +219,26 @@ export default function EditorPane({
     }
   }
 
+  // Two-step reset: first click arms it, second click (within 3s) restores the
+  // pristine exercise, discarding the learner's edits.
+  async function doReset() {
+    if (!crate) return
+    if (!confirmReset) {
+      setConfirmReset(true)
+      return
+    }
+    setConfirmReset(false)
+    try {
+      const content = await resetChapter(crate)
+      setCode(content)
+      setSaved(content)
+      setResult(null)
+      setActiveTab('output')
+    } catch {
+      /* ignore */
+    }
+  }
+
   return (
     <aside
       ref={asideRef}
@@ -222,10 +252,21 @@ export default function EditorPane({
         ) : (
           <span className="text-muted/60">saved</span>
         )}
+        <button
+          onClick={doReset}
+          className={`ml-auto rounded-md border px-2 py-0.5 font-medium transition ${
+            confirmReset
+              ? 'border-rust/60 text-rust-bright'
+              : 'border-edge text-muted hover:text-paper'
+          }`}
+          title="Restore the original exercise (discards your edits)"
+        >
+          {confirmReset ? 'Confirm reset' : '↺ Reset'}
+        </button>
         {editorUrl && (
           <a
             href={editorUrl}
-            className="ml-auto rounded-md border border-edge px-2 py-0.5 font-medium text-crab transition hover:text-paper"
+            className="rounded-md border border-edge px-2 py-0.5 font-medium text-crab transition hover:text-paper"
             title="Open this file in your local editor"
           >
             ‹/› editor ↗

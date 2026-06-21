@@ -67,6 +67,12 @@ export async function getSolution(crate: string): Promise<string> {
   return r.text()
 }
 
+export async function resetChapter(crate: string): Promise<string> {
+  const r = await fetch(`/api/reset/${crate}`, { method: 'POST' })
+  if (!r.ok) throw new Error('reset failed')
+  return r.text()
+}
+
 export async function getProgress(): Promise<Record<string, boolean>> {
   const r = await fetch('/api/progress')
   if (!r.ok) return {}

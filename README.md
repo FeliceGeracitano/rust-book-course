@@ -54,9 +54,8 @@ Tackle one at a time:
       static list, short of full rust-analyzer.
 - [x] **Resizable / draggable Check + Clippy output** — drag to grow the results panel.
 - [x] **Tabbed results panel** — Output / Hints / Solution tabs; Check/Clippy focus Output.
-- [ ] **Chapter reset** — "revert to original" to restart a chapter. Keep a pristine
-      original exercise file untouched and edit a separate working copy, so reset just
-      deletes the working copy and restores the original.
+- [x] **Chapter reset** — "↺ Reset" restores the pristine exercise (`.exercise.rs`,
+      never edited) over the working `src/lib.rs`. Two-step confirm.
 - [ ] **Collapsible left sidebar** — hide/show the chapter tree to free width.
 - [ ] **Highlight Clippy output** like the Check output (color-code lint notes).
 - [ ] **Appendix: complete or remove** — appendix A–G is in the TOC but has no
