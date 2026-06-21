@@ -19,7 +19,7 @@ export default function App() {
   const [error, setError] = useState<string | null>(null)
   const [editorWidth, setEditorWidth] = useState(() => {
     const v = Number(localStorage.getItem('editorWidth'))
-    return v >= 360 ? v : 560
+    return v >= 360 ? v : 640
   })
   const [dragging, setDragging] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(() => localStorage.getItem('sidebarOpen') !== 'false')
