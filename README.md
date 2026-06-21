@@ -52,11 +52,8 @@ Tackle one at a time:
 - [ ] **Smarter autocomplete** — also suggest symbols defined in the current file
       (your `fn`/`struct`/`enum`/`let` names). Still non-AI — a step up from the
       static list, short of full rust-analyzer.
-- [ ] **Resizable / draggable Check + Clippy output** — drag to grow the results panel.
-- [ ] **Tabbed results panel** — replace the row of buttons with tabs (e.g. Output /
-      Hints / Solution). Clicking a tab reveals its content in the panel instead of
-      stacking everything below (which now requires scrolling and isn't obvious).
-      Check/Clippy run, then focus the Output tab.
+- [x] **Resizable / draggable Check + Clippy output** — drag to grow the results panel.
+- [x] **Tabbed results panel** — Output / Hints / Solution tabs; Check/Clippy focus Output.
 - [ ] **Chapter reset** — "revert to original" to restart a chapter. Keep a pristine
       original exercise file untouched and edit a separate working copy, so reset just
       deletes the working copy and restores the original.

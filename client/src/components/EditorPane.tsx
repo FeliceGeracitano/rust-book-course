@@ -18,6 +18,7 @@ import { registerRustCompletions } from '../monacoRust'
 
 type RunMode = 'test' | 'clippy'
 type Busy = 'idle' | 'test' | 'clippy'
+type Tab = 'output' | 'hints' | 'solution'
 
 const AUTOSAVE_MS = 800
 const MONACO_TIMEOUT_MS = 8000
@@ -49,8 +50,7 @@ export default function EditorPane({
   const [busy, setBusy] = useState<Busy>('idle')
   const [result, setResult] = useState<{ mode: RunMode; data: CheckResult } | null>(null)
   const [solution, setSolution] = useState<string | null>(null)
-  const [showSolution, setShowSolution] = useState(false)
-  const [showHints, setShowHints] = useState(false)
+  const [activeTab, setActiveTab] = useState<Tab>('output')
   const [loadError, setLoadError] = useState(false)
   const [editorReady, setEditorReady] = useState(false)
   const [editorFailed, setEditorFailed] = useState(false)
@@ -94,8 +94,7 @@ export default function EditorPane({
   useEffect(() => {
     setResult(null)
     setSolution(null)
-    setShowSolution(false)
-    setShowHints(false)
+    setActiveTab('output')
     setLoadError(false)
     setBusy('idle')
     if (!crate) {
@@ -176,6 +175,7 @@ export default function EditorPane({
     const startCrate = crate
     setBusy(mode)
     setResult(null)
+    setActiveTab('output')
     try {
       await saveFile(startCrate, code)
       if (latest.current.crate === startCrate) setSaved(code)
@@ -200,15 +200,13 @@ export default function EditorPane({
     }
   }
 
-  async function reveal() {
-    if (!showSolution && solution === null && crate) {
-      try {
-        setSolution(await getSolution(crate))
-      } catch {
-        setSolution('_No solution available for this chapter._')
-      }
+  function openTab(tab: Tab) {
+    setActiveTab(tab)
+    if (tab === 'solution' && solution === null && crate) {
+      getSolution(crate)
+        .then(setSolution)
+        .catch(() => setSolution('_No solution available for this chapter._'))
     }
-    setShowSolution((s) => !s)
   }
 
   return (
@@ -279,7 +277,7 @@ export default function EditorPane({
       />
 
       <div style={{ height: panelHeight }} className="flex shrink-0 flex-col">
-        <div className="flex flex-wrap items-center gap-2 px-3 py-2">
+        <div className="flex flex-wrap items-center gap-1.5 border-b border-edge px-3 py-2">
           <button
             disabled={busy !== 'idle'}
             onClick={() => run('test')}
@@ -294,19 +292,25 @@ export default function EditorPane({
           >
             {busy === 'clippy' ? 'Linting…' : 'Clippy'}
           </button>
-          <button
-            onClick={() => setShowHints((s) => !s)}
-            disabled={hints.length === 0}
-            className="rounded-lg border border-edge px-3 py-1.5 text-xs font-semibold text-muted transition hover:text-paper disabled:opacity-40"
-          >
-            {showHints ? 'Hide hints' : `Hints${hints.length ? ` (${hints.length})` : ''}`}
-          </button>
-          <button
-            onClick={reveal}
-            className="rounded-lg border border-edge px-3 py-1.5 text-xs font-semibold text-muted transition hover:text-paper"
-          >
-            {showSolution ? 'Hide solution' : 'Reveal solution'}
-          </button>
+
+          <div className="mx-1 h-5 w-px bg-edge" />
+
+          {([
+            ['output', 'Output'],
+            ['hints', `Hints${hints.length ? ` (${hints.length})` : ''}`],
+            ['solution', 'Solution'],
+          ] as [Tab, string][]).map(([id, label]) => (
+            <button
+              key={id}
+              onClick={() => openTab(id)}
+              className={`rounded-md px-2.5 py-1 text-xs font-semibold transition ${
+                activeTab === id ? 'bg-ink-card text-paper' : 'text-muted hover:text-paper'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+
           {result && (
             <span
               className={`ml-auto text-xs font-semibold ${
@@ -330,35 +334,40 @@ export default function EditorPane({
           )}
         </div>
 
-        <div className="min-h-0 flex-1 overflow-auto pb-2">
-        {showHints && hints.length > 0 && (
-          <ul className="mx-3 mb-2 list-disc rounded-lg border border-edge bg-ink px-6 py-2 text-xs text-crab">
-            {hints.map((h, i) => (
-              <li key={i} className="my-0.5">
-                {h}
-              </li>
+        <div className="min-h-0 flex-1 overflow-auto p-3">
+          {activeTab === 'output' &&
+            (result && testOutput(result.data) ? (
+              <CheckOutput text={testOutput(result.data)} />
+            ) : (
+              <p className="text-xs text-muted">Run Check or Clippy to see results here.</p>
             ))}
-          </ul>
-        )}
 
-        {result && testOutput(result.data) && (
-          <div className="px-3 pb-2">
-            <CheckOutput text={testOutput(result.data)} />
-          </div>
-        )}
+          {activeTab === 'hints' &&
+            (hints.length > 0 ? (
+              <ul className="list-disc rounded-lg border border-edge bg-ink px-6 py-2 text-xs text-crab">
+                {hints.map((h, i) => (
+                  <li key={i} className="my-0.5">
+                    {h}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-xs text-muted">No hints for this exercise.</p>
+            ))}
 
-        {showSolution && solution !== null && (
-          <div className="px-3 pb-3">
-            <div className="prose-rust rounded-lg border border-edge bg-ink p-3 text-sm">
-              <Markdown
-                remarkPlugins={[remarkGfm]}
-                components={{ pre: ({ children }) => <>{children}</>, code: CodeBlock as never }}
-              >
-                {solution}
-              </Markdown>
-            </div>
-          </div>
-        )}
+          {activeTab === 'solution' &&
+            (solution !== null ? (
+              <div className="prose-rust rounded-lg border border-edge bg-ink p-3 text-sm">
+                <Markdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{ pre: ({ children }) => <>{children}</>, code: CodeBlock as never }}
+                >
+                  {solution}
+                </Markdown>
+              </div>
+            ) : (
+              <p className="text-xs text-muted">Loading solution…</p>
+            ))}
         </div>
       </div>
       {panelDragging && <div className="fixed inset-0 z-50 cursor-row-resize" />}
