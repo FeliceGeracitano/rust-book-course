@@ -9,6 +9,8 @@ ideas — ownership, smart pointers, concurrency, async — click.
 
 > `Rust 2024` · `React + Vite` · `rust-analyzer` · `Docker` — one command to run.
 
+<img width="1866" height="1072" alt="Rust Book Course running locally" src="https://github.com/user-attachments/assets/366e6540-c27b-40fb-a488-b29caad2335e" />
+
 ---
 
 ## Quick start
