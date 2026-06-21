@@ -60,6 +60,14 @@ Tackle one at a time:
 - [x] **Appendix: completed** — A–G reference pages authored, each linking the
       official Book; appendix is reference-only (no exercises).
 
+### Bigger / later
+
+- [ ] **rust-analyzer integration** — real semantic autocomplete, hover types,
+      go-to-definition, and live error squiggles in the editor (vs. the current
+      curated list).
+- [ ] **Code-split the client bundle** — lazy-load visualizations and heavy deps
+      so the initial download is smaller and first paint is faster.
+
 ## Credits & attribution
 
 This course is **derived from [The Rust Programming Language](https://doc.rust-lang.org/book/)**
