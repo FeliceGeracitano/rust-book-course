@@ -290,7 +290,10 @@ fn main() {
     ensure_working_files(&chapters_dir);
 
     let server = Server::http(&addr).expect("failed to bind address");
-    println!("rust-book-course server → http://{addr}");
+    // 0.0.0.0 is a bind wildcard, not a browseable host (Safari refuses it),
+    // so advertise localhost when we're listening on every interface.
+    let display_host = if bind == "0.0.0.0" { "localhost" } else { &bind };
+    println!("rust-book-course server → http://{display_host}:{port}");
     println!("  CLIENT_DIR={client_dir}  CONTENT_DIR={content_dir}  CHAPTERS_DIR={chapters_dir}");
 
     let mut progress: HashMap<String, bool> = HashMap::new();
