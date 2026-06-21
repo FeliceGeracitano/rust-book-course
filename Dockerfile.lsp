@@ -9,7 +9,9 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends nodejs \
  && rm -rf /var/lib/apt/lists/*
 
-RUN rustup component add rust-analyzer
+# rust-analyzer needs rust-src to analyze the standard library (std-aware
+# completion, hover, and diagnostics).
+RUN rustup component add rust-analyzer rust-src
 # rust-analyzer watches for a global config and warns when it's absent — create
 # an empty one to silence the noise.
 RUN mkdir -p /root/.config/rust-analyzer && touch /root/.config/rust-analyzer/rust-analyzer.toml
