@@ -7,8 +7,6 @@ Read each lesson in the browser, write **real Rust** in an in-page editor (or yo
 and hit **Check** to run that chapter's tests. Interactive visualizations make the hard
 ideas — ownership, smart pointers, concurrency, async — click.
 
-> `Rust 2024` · `React + Vite` · `rust-analyzer` · `Docker` — one command to run.
-
 <img width="1866" height="1072" alt="Rust Book Course running locally" src="https://github.com/user-attachments/assets/366e6540-c27b-40fb-a488-b29caad2335e" />
 
 ---
@@ -94,8 +92,6 @@ Both edit the same files, so you can mix and match.
 ```bash
 cd client && npm install && npm run dev   # Vite on :5173, proxies /api → :8080
 ```
-
-> Editor deep link opens VS Code by default; for Cursor: `EDITOR_SCHEME=cursor docker compose up`.
 
 ---
 
