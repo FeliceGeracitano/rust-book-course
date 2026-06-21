@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { getLesson } from '../api'
@@ -43,7 +43,11 @@ export default function LessonView({ selection }: { selection: Selection }) {
           Chapter {chapter.number} · {chapter.title}
         </div>
 
-        {Viz && <Viz />}
+        {Viz && (
+          <Suspense fallback={<div className="mb-6 text-xs text-muted">Loading visualization…</div>}>
+            <Viz />
+          </Suspense>
+        )}
 
         {status === 'loading' && <p className="text-muted">Loading lesson…</p>}
 

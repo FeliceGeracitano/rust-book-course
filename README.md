@@ -66,8 +66,9 @@ Tackle one at a time:
       error squiggles via a rust-analyzer sidecar (`lsp/`) bridged over WebSocket;
       a thin in-editor LSP client (`lspClient.ts`) drives Monaco. Falls back to the
       curated list when no LSP server is configured. Runs via `docker compose up`.
-- [ ] **Code-split the client bundle** — lazy-load visualizations and heavy deps
-      so the initial download is smaller and first paint is faster.
+- [x] **Code-split the client bundle** — viz widgets are lazy chunks and big deps
+      (react/shiki/framer-motion/markdown) are split out; main bundle ~700 KB → ~156 KB,
+      `framer-motion` deferred until a visualization chapter.
 
 ## Credits & attribution
 

@@ -14,5 +14,17 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
+    rollupOptions: {
+      output: {
+        // Split big deps into their own cacheable chunks; the per-chapter viz
+        // widgets are already lazy chunks (React.lazy).
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-shiki': ['shiki'],
+          'vendor-motion': ['framer-motion'],
+          'vendor-markdown': ['react-markdown', 'remark-gfm'],
+        },
+      },
+    },
   },
 })
