@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import Editor from '@monaco-editor/react'
+import Editor, { type Monaco } from '@monaco-editor/react'
+import type { editor as MEditor } from 'monaco-editor'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import confetti from 'canvas-confetti'
@@ -16,6 +17,7 @@ import {
 import { CheckOutput, testOutput } from './output'
 import CodeBlock from './CodeBlock'
 import { registerRustCompletions } from '../monacoRust'
+import { lsp } from '../lspClient'
 
 type RunMode = 'test' | 'clippy'
 type Busy = 'idle' | 'test' | 'clippy'
@@ -38,11 +40,13 @@ function extractHints(code: string): string[] {
 export default function EditorPane({
   crate,
   config,
+  configLoaded,
   width,
   onResult,
 }: {
   crate: string | null
   config: AppConfig
+  configLoaded: boolean
   width: number
   onResult: (crate: string, pass: boolean) => void
 }) {
@@ -54,6 +58,13 @@ export default function EditorPane({
   const [activeTab, setActiveTab] = useState<Tab>('output')
   const [loadError, setLoadError] = useState(false)
   const [confirmReset, setConfirmReset] = useState(false)
+  const [lspReady, setLspReady] = useState(false)
+  const monacoRef = useRef<Monaco | null>(null)
+  const editorRef = useRef<MEditor.IStandaloneCodeEditor | null>(null)
+  const lspStarted = useRef(false)
+
+  const docUri =
+    crate && config.chaptersDir ? `file://${config.chaptersDir}/${crate}/src/lib.rs` : null
   const [editorReady, setEditorReady] = useState(false)
   const [editorFailed, setEditorFailed] = useState(false)
   const [panelHeight, setPanelHeight] = useState(() => {
@@ -163,6 +174,35 @@ export default function EditorPane({
     return () => clearTimeout(t)
   }, [confirmReset])
 
+  // Connect to rust-analyzer once the editor + config are ready. If there's no
+  // LSP server, fall back to the curated completion list.
+  useEffect(() => {
+    if (!editorReady || !configLoaded || lspStarted.current) return
+    const monaco = monacoRef.current
+    if (!monaco) return
+    lspStarted.current = true
+    if (config.lspUrl && config.chaptersDir) {
+      lsp
+        .connect(config.lspUrl, `file://${config.chaptersDir}`, monaco)
+        .then(() => {
+          lsp.setModelResolver(() => editorRef.current?.getModel() ?? null)
+          setLspReady(true)
+        })
+        .catch(() => registerRustCompletions(monaco))
+    } else {
+      registerRustCompletions(monaco)
+    }
+  }, [editorReady, configLoaded, config.lspUrl, config.chaptersDir])
+
+  // Keep rust-analyzer's view of the file in sync with the editor.
+  useEffect(() => {
+    if (lspReady && docUri) lsp.openDoc(docUri, latest.current.code)
+  }, [lspReady, docUri])
+
+  useEffect(() => {
+    if (lspReady && docUri) lsp.changeDoc(docUri, code)
+  }, [code, lspReady, docUri])
+
   if (!crate) {
     return (
       <aside
@@ -252,6 +292,11 @@ export default function EditorPane({
         ) : (
           <span className="text-muted/60">saved</span>
         )}
+        {lspReady && (
+          <span className="text-ok" title="rust-analyzer connected">
+            ⚡ rust-analyzer
+          </span>
+        )}
         <button
           onClick={doReset}
           className={`ml-auto rounded-md border px-2 py-0.5 font-medium transition ${
@@ -291,9 +336,10 @@ export default function EditorPane({
             theme="vs-dark"
             value={code}
             onChange={(v) => setCode(v ?? '')}
-            onMount={(_editor, monaco) => {
+            onMount={(editor, monaco) => {
+              editorRef.current = editor
+              monacoRef.current = monaco
               setEditorReady(true)
-              registerRustCompletions(monaco)
             }}
             loading={<div className="p-4 text-sm text-muted">Loading editor…</div>}
             options={{

@@ -82,10 +82,19 @@ export async function getProgress(): Promise<Record<string, boolean>> {
 export interface AppConfig {
   hostRepoDir: string
   editorScheme: string
+  lspUrl: string
+  chaptersDir: string
+}
+
+const DEFAULT_CONFIG: AppConfig = {
+  hostRepoDir: '',
+  editorScheme: 'vscode',
+  lspUrl: '',
+  chaptersDir: '',
 }
 
 export async function getConfig(): Promise<AppConfig> {
   const r = await fetch('/api/config')
-  if (!r.ok) return { hostRepoDir: '', editorScheme: 'vscode' }
-  return r.json()
+  if (!r.ok) return DEFAULT_CONFIG
+  return { ...DEFAULT_CONFIG, ...(await r.json()) }
 }

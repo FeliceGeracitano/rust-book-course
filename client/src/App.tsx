@@ -9,7 +9,13 @@ export default function App() {
   const [course, setCourse] = useState<Course | null>(null)
   const [selection, setSelection] = useState<Selection | null>(null)
   const [progress, setProgress] = useState<Record<string, boolean>>({})
-  const [config, setConfig] = useState<AppConfig>({ hostRepoDir: '', editorScheme: 'vscode' })
+  const [config, setConfig] = useState<AppConfig>({
+    hostRepoDir: '',
+    editorScheme: 'vscode',
+    lspUrl: '',
+    chaptersDir: '',
+  })
+  const [configLoaded, setConfigLoaded] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [editorWidth, setEditorWidth] = useState(() => {
     const v = Number(localStorage.getItem('editorWidth'))
@@ -56,8 +62,11 @@ export default function App() {
       .then(setProgress)
       .catch(() => {})
     getConfig()
-      .then(setConfig)
-      .catch(() => {})
+      .then((c) => {
+        setConfig(c)
+        setConfigLoaded(true)
+      })
+      .catch(() => setConfigLoaded(true))
   }, [])
 
   function markProgress(crate: string, pass: boolean) {
@@ -115,6 +124,7 @@ export default function App() {
         <EditorPane
           crate={selection.chapter.crate}
           config={config}
+          configLoaded={configLoaded}
           width={editorWidth}
           onResult={markProgress}
         />

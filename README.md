@@ -62,9 +62,10 @@ Tackle one at a time:
 
 ### Bigger / later
 
-- [ ] **rust-analyzer integration** — real semantic autocomplete, hover types,
-      go-to-definition, and live error squiggles in the editor (vs. the current
-      curated list).
+- [x] **rust-analyzer integration** — semantic autocomplete, hover types, and live
+      error squiggles via a rust-analyzer sidecar (`lsp/`) bridged over WebSocket;
+      a thin in-editor LSP client (`lspClient.ts`) drives Monaco. Falls back to the
+      curated list when no LSP server is configured. Runs via `docker compose up`.
 - [ ] **Code-split the client bundle** — lazy-load visualizations and heavy deps
       so the initial download is smaller and first paint is faster.
 
