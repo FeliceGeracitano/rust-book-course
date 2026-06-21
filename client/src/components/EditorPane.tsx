@@ -54,10 +54,41 @@ export default function EditorPane({
   const [loadError, setLoadError] = useState(false)
   const [editorReady, setEditorReady] = useState(false)
   const [editorFailed, setEditorFailed] = useState(false)
+  const [panelHeight, setPanelHeight] = useState(() => {
+    const v = Number(localStorage.getItem('panelHeight'))
+    return v >= 80 ? v : 220
+  })
+  const [panelDragging, setPanelDragging] = useState(false)
+  const asideRef = useRef<HTMLElement>(null)
 
   // Latest snapshot, readable from async callbacks/listeners without stale closures.
   const latest = useRef({ crate, code, saved })
   latest.current = { crate, code, saved }
+
+  // Drag the divider between the editor and the results panel to resize it.
+  useEffect(() => {
+    if (!panelDragging) return
+    function onMove(e: MouseEvent) {
+      const rect = asideRef.current?.getBoundingClientRect()
+      if (!rect) return
+      const h = rect.bottom - e.clientY
+      const max = Math.max(80, rect.height - 160)
+      setPanelHeight(Math.max(80, Math.min(h, max)))
+    }
+    function onUp() {
+      setPanelDragging(false)
+    }
+    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mouseup', onUp)
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseup', onUp)
+    }
+  }, [panelDragging])
+
+  useEffect(() => {
+    localStorage.setItem('panelHeight', String(panelHeight))
+  }, [panelHeight])
 
   // Load the file whenever the chapter changes.
   useEffect(() => {
@@ -182,6 +213,7 @@ export default function EditorPane({
 
   return (
     <aside
+      ref={asideRef}
       style={{ width }}
       className="flex shrink-0 flex-col border-l border-edge bg-ink-soft"
     >
@@ -238,7 +270,15 @@ export default function EditorPane({
         )}
       </div>
 
-      <div className="max-h-[46%] shrink-0 overflow-auto border-t border-edge">
+      <div
+        onMouseDown={() => setPanelDragging(true)}
+        className={`h-1 shrink-0 cursor-row-resize transition-colors ${
+          panelDragging ? 'bg-rust' : 'bg-edge hover:bg-rust/60'
+        }`}
+        title="Drag to resize results"
+      />
+
+      <div style={{ height: panelHeight }} className="flex shrink-0 flex-col">
         <div className="flex flex-wrap items-center gap-2 px-3 py-2">
           <button
             disabled={busy !== 'idle'}
@@ -290,6 +330,7 @@ export default function EditorPane({
           )}
         </div>
 
+        <div className="min-h-0 flex-1 overflow-auto pb-2">
         {showHints && hints.length > 0 && (
           <ul className="mx-3 mb-2 list-disc rounded-lg border border-edge bg-ink px-6 py-2 text-xs text-crab">
             {hints.map((h, i) => (
@@ -318,7 +359,9 @@ export default function EditorPane({
             </div>
           </div>
         )}
+        </div>
       </div>
+      {panelDragging && <div className="fixed inset-0 z-50 cursor-row-resize" />}
     </aside>
   )
 }

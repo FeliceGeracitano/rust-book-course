@@ -47,14 +47,20 @@ cd client && npm install && npm run dev   # Vite on :5173, proxies /api to :8080
 
 Tackle one at a time:
 
-- [ ] **Resizable editor pane** — drag the divider between the lesson and the editor.
-- [ ] **Rust autocomplete in Monaco** — language server / IntelliSense for the editor.
+- [x] **Resizable editor pane** — drag the divider between the lesson and the editor.
+- [x] **Rust autocomplete in Monaco** — curated keywords/types/macros/snippets.
+- [ ] **Smarter autocomplete** — also suggest symbols defined in the current file
+      (your `fn`/`struct`/`enum`/`let` names). Still non-AI — a step up from the
+      static list, short of full rust-analyzer.
 - [ ] **Resizable / draggable Check + Clippy output** — drag to grow the results panel.
 - [ ] **Chapter reset** — "revert to original" to restart a chapter. Keep a pristine
       original exercise file untouched and edit a separate working copy, so reset just
       deletes the working copy and restores the original.
 - [ ] **Collapsible left sidebar** — hide/show the chapter tree to free width.
 - [ ] **Highlight Clippy output** like the Check output (color-code lint notes).
+- [ ] **Appendix: complete or remove** — appendix A–G is in the TOC but has no
+      lesson content (shows "coming soon") and no exercises. Either author the
+      reference pages or drop it from `content/course.json`.
 
 ## Credits & attribution
 

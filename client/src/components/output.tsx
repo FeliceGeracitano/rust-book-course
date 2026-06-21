@@ -26,7 +26,7 @@ function lineClass(line: string): string {
 
 export function CheckOutput({ text }: { text: string }) {
   return (
-    <div className="max-h-72 overflow-auto rounded-lg border border-edge bg-ink p-3 font-mono text-xs leading-relaxed">
+    <div className="rounded-lg border border-edge bg-ink p-3 font-mono text-xs leading-relaxed">
       {text.split('\n').map((ln, i) => (
         <div key={i} className={`whitespace-pre-wrap ${lineClass(ln)}`}>
           {ln || ' '}
