@@ -49,9 +49,7 @@ Tackle one at a time:
 
 - [x] **Resizable editor pane** — drag the divider between the lesson and the editor.
 - [x] **Rust autocomplete in Monaco** — curated keywords/types/macros/snippets.
-- [ ] **Smarter autocomplete** — also suggest symbols defined in the current file
-      (your `fn`/`struct`/`enum`/`let` names). Still non-AI — a step up from the
-      static list, short of full rust-analyzer.
+- [x] **Smarter autocomplete** — also suggests symbols defined in the current file (fn/struct/enum/trait/type/const/let), non-AI.
 - [x] **Resizable / draggable Check + Clippy output** — drag to grow the results panel.
 - [x] **Tabbed results panel** — Output / Hints / Solution tabs; Check/Clippy focus Output.
 - [x] **Chapter reset** — "↺ Reset" restores the pristine exercise (`.exercise.rs`,

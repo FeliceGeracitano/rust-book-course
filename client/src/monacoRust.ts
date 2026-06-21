@@ -78,7 +78,33 @@ export function registerRustCompletions(monaco: Monaco) {
       const simple = (labels: string[], kind: number, detail: string) =>
         labels.map((label) => ({ label, kind, insertText: label, range, detail }))
 
+      // Symbols the learner defined in this file (fn/struct/enum/let/...).
+      const builtins = new Set([...KEYWORDS, ...TYPES, ...VARIANTS])
+      const text = model.getValue()
+      const symbols = new Map<string, number>()
+      const scan = (re: RegExp, kind: number) => {
+        for (const m of text.matchAll(re)) {
+          const name = m[1]
+          if (!builtins.has(name)) symbols.set(name, kind)
+        }
+      }
+      scan(/\bfn\s+([A-Za-z_]\w*)/g, Kind.Function)
+      scan(/\bstruct\s+([A-Za-z_]\w*)/g, Kind.Struct)
+      scan(/\benum\s+([A-Za-z_]\w*)/g, Kind.Enum)
+      scan(/\btrait\s+([A-Za-z_]\w*)/g, Kind.Interface)
+      scan(/\btype\s+([A-Za-z_]\w*)/g, Kind.TypeParameter)
+      scan(/\b(?:const|static)\s+([A-Za-z_]\w*)/g, Kind.Constant)
+      scan(/\blet\s+(?:mut\s+)?([a-z_]\w*)/g, Kind.Variable)
+      const fileSymbols = [...symbols].map(([label, kind]) => ({
+        label,
+        kind,
+        insertText: label,
+        range,
+        detail: 'in this file',
+      }))
+
       const suggestions = [
+        ...fileSymbols,
         ...simple(KEYWORDS, Kind.Keyword, 'keyword'),
         ...simple(TYPES, Kind.Struct, 'std type'),
         ...simple(VARIANTS, Kind.EnumMember, 'variant'),
