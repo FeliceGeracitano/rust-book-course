@@ -22,3 +22,18 @@ services:
       # ${PWD} is the repo dir when you run `docker compose up`.
       HOST_REPO_DIR: ${PWD}
       EDITOR_SCHEME: ${EDITOR_SCHEME:-vscode}
+      LSP_URL: ${LSP_URL:-ws://localhost:3030}
+
+  lsp:
+    build:
+      context: .
+      dockerfile: Dockerfile.lsp
+    # Loopback only — like the main app, this must not be reachable from the LAN.
+    ports:
+      - "127.0.0.1:3030:3030"
+    volumes:
+      - ./chapters:/app/chapters
+    environment:
+      LSP_PORT: "3030"
+      CHAPTERS_DIR: /app/chapters
+      CARGO_TARGET_DIR: /ra-target

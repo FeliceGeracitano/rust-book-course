@@ -240,7 +240,19 @@ fn handle(
             // Lets the client build an editor deep-link to the file on the HOST.
             let host_repo_dir = env::var("HOST_REPO_DIR").unwrap_or_default();
             let editor_scheme = env::var("EDITOR_SCHEME").unwrap_or_else(|_| "vscode".to_string());
-            json(serde_json::json!({ "hostRepoDir": host_repo_dir, "editorScheme": editor_scheme }).to_string())
+            let lsp_url = env::var("LSP_URL").unwrap_or_default();
+            // The container path rust-analyzer indexes; the client builds file://
+            // document URIs from it so RA resolves them inside the workspace.
+            let chapters_for_lsp = env::var("CHAPTERS_DIR").unwrap_or_else(|_| "chapters".to_string());
+            json(
+                serde_json::json!({
+                    "hostRepoDir": host_repo_dir,
+                    "editorScheme": editor_scheme,
+                    "lspUrl": lsp_url,
+                    "chaptersDir": chapters_for_lsp,
+                })
+                .to_string(),
+            )
         }
         _ if is_get => serve_static(client_dir, path),
         _ => not_found(),

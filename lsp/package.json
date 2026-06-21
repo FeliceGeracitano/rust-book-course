@@ -1,0 +1,11 @@
+{
+  "name": "rust-book-course-lsp",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "WebSocket bridge from the browser editor to rust-analyzer (LSP)",
+  "dependencies": {
+    "vscode-ws-jsonrpc": "^3.4.0",
+    "ws": "^8.18.0"
+  }
+}
