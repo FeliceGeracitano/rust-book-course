@@ -57,7 +57,7 @@ Tackle one at a time:
 - [x] **Chapter reset** — "↺ Reset" restores the pristine exercise (`.exercise.rs`,
       never edited) over the working `src/lib.rs`. Two-step confirm.
 - [x] **Collapsible left sidebar** — ☰ toggles the chapter tree (persists).
-- [ ] **Highlight Clippy output** like the Check output (color-code lint notes).
+- [x] **Highlight Clippy output** — clippy frame lines (locations, carets, notes) color-coded.
 - [ ] **Appendix: complete or remove** — appendix A–G is in the TOC but has no
       lesson content (shows "coming soon") and no exercises. Either author the
       reference pages or drop it from `content/course.json`.

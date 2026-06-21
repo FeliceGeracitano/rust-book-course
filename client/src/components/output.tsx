@@ -13,13 +13,21 @@ export function testOutput(r: CheckResult): string {
 // pops out of cargo's progress chatter.
 function lineClass(line: string): string {
   const t = line.trimStart()
+  // assertion diffs
   if (/^left:/.test(t)) return 'text-rust-bright'
   if (/^right:/.test(t)) return 'text-ok'
-  if (/^assertion|panicked at/.test(t)) return 'text-crab'
-  if (/^warning/.test(t)) return 'text-crab'
+  // errors & warnings (clippy with -D warnings reports lints as `error:`)
   if (/\bFAILED\b/.test(line) || /^error/.test(t)) return 'text-rust-bright font-semibold'
+  if (/^warning/.test(t)) return 'text-crab font-semibold'
+  if (/^assertion|panicked at/.test(t)) return 'text-crab'
+  // rustc/clippy diagnostic frame
+  if (/\^{2,}/.test(line)) return 'text-crab' // the ^^^^ underline
+  if (/^-->/.test(t)) return 'text-muted' // file:line:col location
+  if (/^=\s/.test(t) || /^(help|note):/.test(t)) return 'text-muted' // = note / = help
+  // successes
   if (/\.\.\. ok\b/.test(line) || /^test result: ok/.test(t)) return 'text-ok'
-  if (/^(----|failures:|running |test result|note:|help:)/.test(t)) return 'text-muted'
+  // cargo chatter
+  if (/^(----|failures:|running |test result)/.test(t)) return 'text-muted'
   if (/^(Compiling|Finished|Running|Checking)/.test(t)) return 'text-muted'
   return 'text-paper/75'
 }
