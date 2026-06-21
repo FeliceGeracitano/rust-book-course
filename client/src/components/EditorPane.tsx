@@ -14,6 +14,7 @@ import {
 } from '../api'
 import { CheckOutput, testOutput } from './output'
 import CodeBlock from './CodeBlock'
+import { registerRustCompletions } from '../monacoRust'
 
 type RunMode = 'test' | 'clippy'
 type Busy = 'idle' | 'test' | 'clippy'
@@ -219,7 +220,10 @@ export default function EditorPane({
             theme="vs-dark"
             value={code}
             onChange={(v) => setCode(v ?? '')}
-            onMount={() => setEditorReady(true)}
+            onMount={(_editor, monaco) => {
+              setEditorReady(true)
+              registerRustCompletions(monaco)
+            }}
             loading={<div className="p-4 text-sm text-muted">Loading editor…</div>}
             options={{
               minimap: { enabled: false },
