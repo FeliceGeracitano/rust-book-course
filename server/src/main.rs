@@ -35,6 +35,19 @@ fn valid_seg(s: &str) -> bool {
             .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '_')
 }
 
+/// Hashed assets are immutable and cache forever; everything else (notably
+/// index.html) must revalidate so a rebuild's new asset hashes are always picked
+/// up — otherwise a stale cached index.html points at chunks that no longer exist
+/// (blank page until a manual refresh).
+fn cache_header(rel: &str) -> Header {
+    let value = if rel.starts_with("assets/") {
+        "public, max-age=31536000, immutable"
+    } else {
+        "no-cache"
+    };
+    Header::from_bytes(&b"Cache-Control"[..], value.as_bytes()).expect("static header is valid")
+}
+
 fn content_type_for(path: &str) -> &'static str {
     match path.rsplit('.').next().unwrap_or("") {
         "html" => "text/html; charset=utf-8",
@@ -72,14 +85,18 @@ fn serve_static(client_dir: &str, url_path: &str) -> Body {
     path.push(rel);
     if path.is_file() {
         return match fs::read(&path) {
-            Ok(bytes) => Response::from_data(bytes).with_header(header(content_type_for(rel))),
+            Ok(bytes) => Response::from_data(bytes)
+                .with_header(header(content_type_for(rel)))
+                .with_header(cache_header(rel)),
             Err(_) => not_found(),
         };
     }
     // SPA fallback: a path without a file extension is a client route.
     if !rel.contains('.') {
         if let Ok(bytes) = fs::read(Path::new(client_dir).join("index.html")) {
-            return Response::from_data(bytes).with_header(header("text/html; charset=utf-8"));
+            return Response::from_data(bytes)
+                .with_header(header("text/html; charset=utf-8"))
+                .with_header(cache_header("index.html"));
         }
     }
     not_found()
