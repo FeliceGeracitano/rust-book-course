@@ -56,7 +56,7 @@ Tackle one at a time:
 - [x] **Tabbed results panel** — Output / Hints / Solution tabs; Check/Clippy focus Output.
 - [x] **Chapter reset** — "↺ Reset" restores the pristine exercise (`.exercise.rs`,
       never edited) over the working `src/lib.rs`. Two-step confirm.
-- [ ] **Collapsible left sidebar** — hide/show the chapter tree to free width.
+- [x] **Collapsible left sidebar** — ☰ toggles the chapter tree (persists).
 - [ ] **Highlight Clippy output** like the Check output (color-code lint notes).
 - [ ] **Appendix: complete or remove** — appendix A–G is in the TOC but has no
       lesson content (shows "coming soon") and no exercises. Either author the

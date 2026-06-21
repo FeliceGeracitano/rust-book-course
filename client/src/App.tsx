@@ -16,6 +16,11 @@ export default function App() {
     return v >= 360 ? v : 560
   })
   const [dragging, setDragging] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(() => localStorage.getItem('sidebarOpen') !== 'false')
+
+  useEffect(() => {
+    localStorage.setItem('sidebarOpen', String(sidebarOpen))
+  }, [sidebarOpen])
 
   useEffect(() => {
     if (!dragging) return
@@ -72,7 +77,15 @@ export default function App() {
 
   return (
     <div className="flex h-full flex-col">
-      <header className="flex items-center gap-3 border-b border-edge bg-ink-soft px-5 py-3">
+      <header className="flex items-center gap-3 border-b border-edge bg-ink-soft px-4 py-3">
+        <button
+          onClick={() => setSidebarOpen((o) => !o)}
+          className="rounded-md border border-edge px-2 py-1 text-sm text-muted transition hover:text-paper"
+          title={sidebarOpen ? 'Hide chapters' : 'Show chapters'}
+          aria-label="Toggle chapter sidebar"
+        >
+          ☰
+        </button>
         <span className="text-xl">🦀</span>
         <h1 className="text-lg font-semibold tracking-tight">{course.title}</h1>
         <span className="ml-auto text-xs text-muted">
@@ -81,12 +94,14 @@ export default function App() {
       </header>
 
       <div className="flex min-h-0 flex-1">
-        <ChapterTree
-          course={course}
-          selection={selection}
-          progress={progress}
-          onSelect={setSelection}
-        />
+        {sidebarOpen && (
+          <ChapterTree
+            course={course}
+            selection={selection}
+            progress={progress}
+            onSelect={setSelection}
+          />
+        )}
         <main className="flex min-h-0 min-w-0 flex-1 flex-col">
           <LessonView selection={selection} />
         </main>
