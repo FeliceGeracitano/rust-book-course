@@ -35,10 +35,12 @@ function extractHints(code: string): string[] {
 export default function EditorPane({
   crate,
   config,
+  width,
   onResult,
 }: {
   crate: string | null
   config: AppConfig
+  width: number
   onResult: (crate: string, pass: boolean) => void
 }) {
   const [code, setCode] = useState('')
@@ -122,7 +124,10 @@ export default function EditorPane({
 
   if (!crate) {
     return (
-      <aside className="flex w-[44%] min-w-[360px] shrink-0 items-center justify-center border-l border-edge bg-ink-soft p-6 text-center text-sm text-muted">
+      <aside
+        style={{ width }}
+        className="flex shrink-0 items-center justify-center border-l border-edge bg-ink-soft p-6 text-center text-sm text-muted"
+      >
         No exercise for this section — it's reference reading.
       </aside>
     )
@@ -175,7 +180,10 @@ export default function EditorPane({
   }
 
   return (
-    <aside className="flex w-[44%] min-w-[360px] shrink-0 flex-col border-l border-edge bg-ink-soft">
+    <aside
+      style={{ width }}
+      className="flex shrink-0 flex-col border-l border-edge bg-ink-soft"
+    >
       <div className="flex items-center gap-2 border-b border-edge px-3 py-2 text-xs">
         <span className="font-mono text-muted">chapters/{crate}/src/lib.rs</span>
         {dirty ? (

@@ -11,6 +11,33 @@ export default function App() {
   const [progress, setProgress] = useState<Record<string, boolean>>({})
   const [config, setConfig] = useState<AppConfig>({ hostRepoDir: '', editorScheme: 'vscode' })
   const [error, setError] = useState<string | null>(null)
+  const [editorWidth, setEditorWidth] = useState(() => {
+    const v = Number(localStorage.getItem('editorWidth'))
+    return v >= 360 ? v : 560
+  })
+  const [dragging, setDragging] = useState(false)
+
+  useEffect(() => {
+    if (!dragging) return
+    function onMove(e: MouseEvent) {
+      const desired = window.innerWidth - e.clientX
+      const max = Math.max(360, window.innerWidth - 520)
+      setEditorWidth(Math.max(360, Math.min(desired, max)))
+    }
+    function onUp() {
+      setDragging(false)
+    }
+    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mouseup', onUp)
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseup', onUp)
+    }
+  }, [dragging])
+
+  useEffect(() => {
+    localStorage.setItem('editorWidth', String(editorWidth))
+  }, [editorWidth])
 
   useEffect(() => {
     getChapters()
@@ -63,7 +90,20 @@ export default function App() {
         <main className="flex min-h-0 min-w-0 flex-1 flex-col">
           <LessonView selection={selection} />
         </main>
-        <EditorPane crate={selection.chapter.crate} config={config} onResult={markProgress} />
+        <div
+          onMouseDown={() => setDragging(true)}
+          className={`w-1 shrink-0 cursor-col-resize transition-colors ${
+            dragging ? 'bg-rust' : 'bg-edge hover:bg-rust/60'
+          }`}
+          title="Drag to resize"
+        />
+        <EditorPane
+          crate={selection.chapter.crate}
+          config={config}
+          width={editorWidth}
+          onResult={markProgress}
+        />
+        {dragging && <div className="fixed inset-0 z-50 cursor-col-resize" />}
       </div>
     </div>
   )
