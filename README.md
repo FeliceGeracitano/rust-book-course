@@ -58,6 +58,7 @@ Tackle one at a time:
       never edited) over the working `src/lib.rs`. Two-step confirm.
 - [x] **Collapsible left sidebar** — ☰ toggles the chapter tree (persists).
 - [x] **Highlight Clippy output** — clippy frame lines (locations, carets, notes) color-coded.
+- [x] **Pointer cursor on buttons** — hand cursor on clickable buttons/links (Tailwind v4 default).
 - [ ] **Appendix: complete or remove** — appendix A–G is in the TOC but has no
       lesson content (shows "coming soon") and no exercises. Either author the
       reference pages or drop it from `content/course.json`.

@@ -24,6 +24,14 @@ body,
   height: 100%;
 }
 
+/* Tailwind v4's reset sets buttons to the default cursor; restore the hand
+   cursor on anything clickable. */
+button:not(:disabled),
+a[href],
+[role='button'] {
+  cursor: pointer;
+}
+
 body {
   margin: 0;
   background-color: var(--color-ink);
