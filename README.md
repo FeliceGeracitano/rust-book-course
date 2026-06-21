@@ -1,84 +1,111 @@
 # Rust Book Course 🦀
 
 An interactive, self-hosted course for learning Rust, structured after
-[The Rust Programming Language](https://doc.rust-lang.org/book/) (2024 edition).
+[**The Rust Programming Language**](https://doc.rust-lang.org/book/) (2024 edition).
 
-You read each lesson in the browser, write real Rust in your terminal, and click
-**Check** to run that chapter's tests. Progress and visualizations live in the UI;
-the actual learning happens in `chapters/`.
+Read each lesson in the browser, write **real Rust** in an in-page editor (or your own),
+and hit **Check** to run that chapter's tests. Interactive visualizations make the hard
+ideas — ownership, smart pointers, concurrency, async — click.
 
-## Layout
+> `Rust 2024` · `React + Vite` · `rust-analyzer` · `Docker` — one command to run.
 
-| Path | What |
-|------|------|
-| `chapters/` | One Cargo crate per chapter — the Rust you edit. Make the tests pass. |
-| `content/`  | Lesson prose (`content/<crate>/*.md`) + `course.json` (the table of contents). |
-| `server/`   | Rust `tiny_http` server: serves the UI, the lessons, and runs your tests. |
-| `client/`   | React + Vite UI (chapter tree, lessons, **Check** button). |
+---
 
-## Learn in the terminal (works today)
+## Quick start
+
+```bash
+docker compose up        # → http://localhost:8080
+```
+
+Only **Docker** is required (the container carries the Rust + Node toolchains). A local
+Rust install is optional and only nice-to-have for editing in your own terminal.
+
+Then: pick a chapter → read the lesson → make its tests pass → **Check** → 🎉.
+
+---
+
+## How it works
+
+```
+┌── Chapters ──┐   ┌──────── Lesson ────────┐   ┌──────── Editor ────────┐
+│ 1 Getting…  ✓│   │  4.1 What is Ownership │   │  fn main() { … }        │
+│ 4 Ownership ●│   │  [ownership viz ▸]     │   │  ⚡ rust-analyzer        │
+│ …            │   │  prose + examples      │   │  [Check][Clippy][Hints] │
+└──────────────┘   └────────────────────────┘   └──── pass / fail ───────┘
+```
+
+Each chapter is a real Cargo crate. Exercises ship **failing on purpose** (`todo!()`s) —
+your job is to make them green. **Check** runs `cargo test` for that chapter; **Clippy**
+runs the linter; **Hints** and **Reveal solution** are a tab away when you're stuck.
+
+## Two ways to work
+
+**In the browser** — edit in the built-in Monaco editor (rust-analyzer completions, hover
+types, live error squiggles), then Check. Your edits autosave.
+
+**In your terminal** — edit the files directly and run tests yourself:
 
 ```bash
 cd chapters
-# pick a chapter, open its src/, complete the `todo!()`s, then:
-cargo test -p ch01_getting_started
+cargo test -p ch01_getting_started      # one chapter
 ```
 
-Exercises ship **failing on purpose** — your job is to make them green.
+Both edit the same files, so you can mix and match.
 
-## Run the full app
+---
+
+## Features
+
+- 🦀 **All 21 Book chapters + appendix** — real exercises, tests, solutions, and prose.
+- ✍️ **In-browser Monaco editor** — resizable, with autocomplete and a **↺ Reset** to
+  restore the pristine exercise.
+- 🧠 **rust-analyzer** — semantic completions, hover types, and live error squiggles via
+  a sidecar (falls back to a curated list if unavailable).
+- ✅ **Check / Clippy** — run tests and idiomatic-Rust lints; output is color-highlighted
+  in a resizable, tabbed panel (Output · Hints · Solution).
+- 🎨 **Interactive visualizations** — ownership, collections, smart pointers, concurrency,
+  and async, animated with step controls.
+- 🧩 **Quality-of-life** — collapsible sidebar, progress ticks, confetti on pass, and an
+  "open in your editor" deep link.
+
+---
+
+## Project layout
+
+| Path | What |
+|------|------|
+| `chapters/` | One Cargo crate per chapter — the Rust you edit. `.exercise.rs` is the pristine original; `src/lib.rs` is your (git-ignored) working copy. |
+| `content/`  | Lesson prose (`content/<crate>/*.md`) + `course.json` (the table of contents). |
+| `server/`   | Rust `tiny_http` server — serves the UI, lessons, and runs your tests. |
+| `client/`   | React + Vite UI (chapter tree, lessons, editor, visualizations). |
+| `lsp/`      | rust-analyzer ↔ browser WebSocket bridge (LSP). |
+
+## Tech stack
+
+**Server** Rust · `tiny_http` · `serde_json`
+**Client** React · Vite · TypeScript · Tailwind v4 · Shiki · Framer Motion · Monaco
+**Language intelligence** rust-analyzer over a Node WebSocket bridge
+**Run** Docker Compose (app + lsp)
+
+## Develop the UI
 
 ```bash
-docker compose up   # -> http://localhost:8080
+cd client && npm install && npm run dev   # Vite on :5173, proxies /api → :8080
 ```
 
-Open the page, pick a chapter, edit its crate in `chapters/`, and hit **Check** —
-the server runs `cargo test` for that chapter and shows pass/fail. `chapters/` and
-`content/` are mounted, so your edits are live without a rebuild. Only Docker is
-required; a local Rust install is optional.
+> Editor deep link opens VS Code by default; for Cursor: `EDITOR_SCHEME=cursor docker compose up`.
 
-### Develop the UI
-
-```bash
-cd client && npm install && npm run dev   # Vite on :5173, proxies /api to :8080
-```
-
-## Roadmap / TODO
-
-Tackle one at a time:
-
-- [x] **Resizable editor pane** — drag the divider between the lesson and the editor.
-- [x] **Rust autocomplete in Monaco** — curated keywords/types/macros/snippets.
-- [x] **Smarter autocomplete** — also suggests symbols defined in the current file (fn/struct/enum/trait/type/const/let), non-AI.
-- [x] **Resizable / draggable Check + Clippy output** — drag to grow the results panel.
-- [x] **Tabbed results panel** — Output / Hints / Solution tabs; Check/Clippy focus Output.
-- [x] **Chapter reset** — "↺ Reset" restores the pristine exercise (`.exercise.rs`,
-      never edited) over the working `src/lib.rs`. Two-step confirm.
-- [x] **Collapsible left sidebar** — ☰ toggles the chapter tree (persists).
-- [x] **Highlight Clippy output** — clippy frame lines (locations, carets, notes) color-coded.
-- [x] **Pointer cursor on buttons** — hand cursor on clickable buttons/links (Tailwind v4 default).
-- [x] **Appendix: completed** — A–G reference pages authored, each linking the
-      official Book; appendix is reference-only (no exercises).
-
-### Bigger / later
-
-- [x] **rust-analyzer integration** — semantic autocomplete, hover types, and live
-      error squiggles via a rust-analyzer sidecar (`lsp/`) bridged over WebSocket;
-      a thin in-editor LSP client (`lspClient.ts`) drives Monaco. Falls back to the
-      curated list when no LSP server is configured. Runs via `docker compose up`.
-- [x] **Code-split the client bundle** — viz widgets are lazy chunks and big deps
-      (react/shiki/framer-motion/markdown) are split out; main bundle ~700 KB → ~156 KB,
-      `framer-motion` deferred until a visualization chapter.
+---
 
 ## Credits & attribution
 
 This course is **derived from [The Rust Programming Language](https://doc.rust-lang.org/book/)**
-("the Book") — its chapter structure, topic order, and learning progression all come
-from there. The Book is written and maintained by the Rust team and contributors.
+("the Book") — its chapter structure, topic order, and learning progression all come from
+there. The Book is written and maintained by the Rust team and contributors.
 
 This repo is an **unofficial** companion: it reorganizes the Book's curriculum into
-hands-on, test-driven exercises plus a small local UI. It is not affiliated with or
-endorsed by the Rust project. For the authoritative text, always read the Book itself:
+hands-on, test-driven exercises plus a small local UI. It is **not affiliated with or
+endorsed by** the Rust project. For the authoritative text, always read the Book itself:
 <https://doc.rust-lang.org/book/>.
 
 The Book is licensed under **MIT OR Apache-2.0**; any prose adapted from it here is used
