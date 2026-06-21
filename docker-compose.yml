@@ -1,8 +1,10 @@
 services:
   app:
     build: .
+    # Publish on the host loopback only — the file-write API must not be reachable
+    # from the LAN. The container itself listens on 0.0.0.0 (BIND_ADDR below).
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     # Mount the editable source so your terminal edits + `cargo test` are live
     # without rebuilding the image. CARGO_TARGET_DIR points off the mount so the
     # container's Linux build artifacts never clash with host (macOS) ones.
@@ -15,6 +17,7 @@ services:
       CHAPTERS_DIR: /app/chapters
       CARGO_TARGET_DIR: /cargo-target
       PORT: "8080"
+      BIND_ADDR: 0.0.0.0
       # Used only to build an "open in editor" deep-link to the file on your host.
       # ${PWD} is the repo dir when you run `docker compose up`.
       HOST_REPO_DIR: ${PWD}

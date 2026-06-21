@@ -19,6 +19,8 @@ RUN cargo build --release
 #    `cargo test` against the mounted chapter crates.
 FROM rust:1.95-slim
 WORKDIR /app
+# clippy powers the "Clippy" lint button; rustup ships with the rust image.
+RUN rustup component add clippy
 COPY --from=server /app/server/target/release/server /usr/local/bin/server
 COPY --from=client /app/client/dist /app/client/dist
 COPY chapters /app/chapters

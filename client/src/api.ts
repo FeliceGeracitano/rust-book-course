@@ -44,6 +44,29 @@ export async function check(crate: string): Promise<CheckResult> {
   return r.json()
 }
 
+export async function clippy(crate: string): Promise<CheckResult> {
+  const r = await fetch(`/api/clippy/${crate}`, { method: 'POST' })
+  if (!r.ok) throw new Error('clippy failed to run')
+  return r.json()
+}
+
+export async function getFile(crate: string): Promise<string> {
+  const r = await fetch(`/api/file/${crate}`)
+  if (!r.ok) throw new Error('file not found')
+  return r.text()
+}
+
+export async function saveFile(crate: string, content: string): Promise<void> {
+  const r = await fetch(`/api/file/${crate}`, { method: 'PUT', body: content })
+  if (!r.ok) throw new Error('save failed')
+}
+
+export async function getSolution(crate: string): Promise<string> {
+  const r = await fetch(`/api/solution/${crate}`)
+  if (!r.ok) throw new Error('no solution')
+  return r.text()
+}
+
 export async function getProgress(): Promise<Record<string, boolean>> {
   const r = await fetch('/api/progress')
   if (!r.ok) return {}

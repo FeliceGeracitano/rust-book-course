@@ -3,7 +3,7 @@ import { AppConfig, Course, getChapters, getConfig, getProgress } from './api'
 import { Selection } from './types'
 import ChapterTree from './components/ChapterTree'
 import LessonView from './components/LessonView'
-import CheckPanel from './components/CheckPanel'
+import EditorPane from './components/EditorPane'
 
 export default function App() {
   const [course, setCourse] = useState<Course | null>(null)
@@ -60,10 +60,10 @@ export default function App() {
           progress={progress}
           onSelect={setSelection}
         />
-        <main className="flex min-h-0 flex-1 flex-col">
+        <main className="flex min-h-0 min-w-0 flex-1 flex-col">
           <LessonView selection={selection} />
-          <CheckPanel crate={selection.chapter.crate} config={config} onResult={markProgress} />
         </main>
+        <EditorPane crate={selection.chapter.crate} config={config} onResult={markProgress} />
       </div>
     </div>
   )

@@ -11,7 +11,7 @@
 use std::collections::HashMap;
 use std::env;
 use std::fs;
-use std::io::Cursor;
+use std::io::{Cursor, Read};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
@@ -85,21 +85,19 @@ fn serve_static(client_dir: &str, url_path: &str) -> Body {
     not_found()
 }
 
-/// Run the chapter's tests and report pass/fail with captured output.
-fn run_check(chapters_dir: &str, krate: &str) -> (bool, String, String) {
-    // On macOS Docker bind mounts, a freshly-edited file's mtime can lag behind
-    // its content, so cargo's mtime fingerprint may skip a recompile and reuse a
-    // stale test binary. Bumping the mtime first forces cargo to see the change.
+/// Bump source mtimes so cargo always recompiles. On macOS Docker bind mounts a
+/// freshly-edited file's mtime can lag its content, so cargo's mtime fingerprint
+/// may skip a rebuild and reuse a stale binary.
+fn touch_sources(chapters_dir: &str, krate: &str) {
     let crate_dir = Path::new(chapters_dir).join(krate);
     let _ = Command::new("find")
         .args([crate_dir.to_string_lossy().as_ref(), "-name", "*.rs", "-exec", "touch", "{}", "+"])
         .status();
+}
 
-    match Command::new("cargo")
-        .args(["test", "-p", krate])
-        .current_dir(chapters_dir)
-        .output()
-    {
+/// Run a cargo subcommand in the workspace and capture pass/stdout/stderr.
+fn run_cargo(chapters_dir: &str, args: &[&str]) -> (bool, String, String) {
+    match Command::new("cargo").args(args).current_dir(chapters_dir).output() {
         Ok(o) => (
             o.status.success(),
             String::from_utf8_lossy(&o.stdout).into_owned(),
@@ -109,10 +107,20 @@ fn run_check(chapters_dir: &str, krate: &str) -> (bool, String, String) {
     }
 }
 
+fn cargo_json(pass: bool, stdout: String, stderr: String) -> String {
+    serde_json::json!({ "pass": pass, "stdout": stdout, "stderr": stderr }).to_string()
+}
+
+/// Path to a chapter's editable exercise file.
+fn lib_path(chapters_dir: &str, krate: &str) -> PathBuf {
+    Path::new(chapters_dir).join(krate).join("src").join("lib.rs")
+}
+
 fn handle(
     method: &Method,
     segs: &[&str],
     path: &str,
+    body: &str,
     client_dir: &str,
     content_dir: &str,
     chapters_dir: &str,
@@ -120,6 +128,7 @@ fn handle(
 ) -> Body {
     let is_get = method == &Method::Get;
     let is_post = method == &Method::Post;
+    let is_put = method == &Method::Put;
 
     match segs {
         ["api", "chapters"] if is_get => match fs::read_to_string(Path::new(content_dir).join("course.json")) {
@@ -140,9 +149,50 @@ fn handle(
             if !valid_seg(krate) {
                 return not_found();
             }
-            let (pass, stdout, stderr) = run_check(chapters_dir, krate);
+            touch_sources(chapters_dir, krate);
+            let (pass, stdout, stderr) = run_cargo(chapters_dir, &["test", "-p", krate]);
             progress.insert((*krate).to_string(), pass);
-            json(serde_json::json!({ "pass": pass, "stdout": stdout, "stderr": stderr }).to_string())
+            json(cargo_json(pass, stdout, stderr))
+        }
+        ["api", "clippy", krate] if is_post => {
+            if !valid_seg(krate) {
+                return not_found();
+            }
+            touch_sources(chapters_dir, krate);
+            // `-D warnings` makes clippy exit non-zero on any lint, so `pass`
+            // truly means "idiomatic & warning-free" for the learning badge.
+            let (pass, stdout, stderr) =
+                run_cargo(chapters_dir, &["clippy", "-p", krate, "--tests", "--", "-D", "warnings"]);
+            json(cargo_json(pass, stdout, stderr))
+        }
+        ["api", "file", krate] if is_get => {
+            if !valid_seg(krate) {
+                return not_found();
+            }
+            match fs::read_to_string(lib_path(chapters_dir, krate)) {
+                Ok(s) => Response::from_string(s).with_header(header("text/plain; charset=utf-8")),
+                Err(_) => not_found(),
+            }
+        }
+        ["api", "file", krate] if is_put => {
+            if !valid_seg(krate) {
+                return not_found();
+            }
+            match fs::write(lib_path(chapters_dir, krate), body) {
+                Ok(_) => json(serde_json::json!({ "ok": true }).to_string()),
+                Err(e) => json(serde_json::json!({ "ok": false, "error": e.to_string() }).to_string())
+                    .with_status_code(500),
+            }
+        }
+        ["api", "solution", krate] if is_get => {
+            if !valid_seg(krate) {
+                return not_found();
+            }
+            let p = Path::new(chapters_dir).join(krate).join("SOLUTION.md");
+            match fs::read_to_string(p) {
+                Ok(s) => Response::from_string(s).with_header(header("text/markdown; charset=utf-8")),
+                Err(_) => not_found(),
+            }
         }
         ["api", "progress"] if is_get => {
             json(serde_json::to_string(progress).unwrap_or_else(|_| "{}".to_string()))
@@ -160,10 +210,14 @@ fn handle(
 
 fn main() {
     let port = env_or("PORT", "8080");
+    // Default to loopback so the host-file write API is never exposed on the LAN.
+    // In Docker the container sets BIND_ADDR=0.0.0.0 and the host publishes the
+    // port on 127.0.0.1 only (see docker-compose.yml).
+    let bind = env_or("BIND_ADDR", "127.0.0.1");
     let client_dir = env_or("CLIENT_DIR", "client/dist");
     let content_dir = env_or("CONTENT_DIR", "content");
     let chapters_dir = env_or("CHAPTERS_DIR", "chapters");
-    let addr = format!("0.0.0.0:{port}");
+    let addr = format!("{bind}:{port}");
 
     let server = Server::http(&addr).expect("failed to bind address");
     println!("rust-book-course server → http://{addr}");
@@ -171,16 +225,25 @@ fn main() {
 
     let mut progress: HashMap<String, bool> = HashMap::new();
 
-    for request in server.incoming_requests() {
+    for mut request in server.incoming_requests() {
         let url = request.url().to_string();
         let path = url.split('?').next().unwrap_or("/").to_string();
         let method = request.method().clone();
         let segs: Vec<&str> = path.split('/').filter(|s| !s.is_empty()).collect();
 
+        // Only PUT carries a body we care about (saving the editor's contents).
+        // Cap the read — an exercise file is at most a few KB.
+        const MAX_BODY: u64 = 1024 * 1024;
+        let mut body = String::new();
+        if method == Method::Put {
+            let _ = request.as_reader().take(MAX_BODY).read_to_string(&mut body);
+        }
+
         let response = handle(
             &method,
             &segs,
             &path,
+            &body,
             &client_dir,
             &content_dir,
             &chapters_dir,
