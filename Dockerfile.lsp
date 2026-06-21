@@ -10,6 +10,9 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 
 RUN rustup component add rust-analyzer
+# rust-analyzer watches for a global config and warns when it's absent — create
+# an empty one to silence the noise.
+RUN mkdir -p /root/.config/rust-analyzer && touch /root/.config/rust-analyzer/rust-analyzer.toml
 
 WORKDIR /lsp
 COPY lsp/package.json lsp/package-lock.json ./
