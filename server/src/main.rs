@@ -5,7 +5,10 @@
 //!   - exposes a tiny JSON API for the table of contents, lessons, and progress,
 //!   - runs `cargo test -p <crate>` for the "Check" button.
 //!
-//! It is intentionally single-threaded: one local learner, one request at a time.
+//! It runs a small pool of worker threads sharing the `tiny_http` server, so a
+//! cold first page load's burst of parallel chunk requests is served in parallel
+//! instead of serialized behind one another (a single-threaded loop leaves some
+//! chunks "pending" until a refresh). Shared progress is behind a `Mutex`.
 //! Reading this file is also a preview of Chapter 21 (building a web server).
 
 use std::collections::HashMap;
@@ -14,6 +17,8 @@ use std::fs;
 use std::io::{Cursor, Read};
 use std::path::{Path, PathBuf};
 use std::process::Command;
+use std::sync::{Arc, Mutex};
+use std::thread;
 
 use tiny_http::{Header, Method, Response, Server};
 
@@ -164,7 +169,7 @@ fn handle(
     client_dir: &str,
     content_dir: &str,
     chapters_dir: &str,
-    progress: &mut HashMap<String, bool>,
+    progress: &Mutex<HashMap<String, bool>>,
 ) -> Body {
     let is_get = method == &Method::Get;
     let is_post = method == &Method::Post;
@@ -191,7 +196,9 @@ fn handle(
             }
             touch_sources(chapters_dir, krate);
             let (pass, stdout, stderr) = run_cargo(chapters_dir, &["test", "-p", krate]);
-            progress.insert((*krate).to_string(), pass);
+            // Lock only to record the result — never while cargo runs, so a slow
+            // check doesn't block other requests.
+            progress.lock().unwrap().insert((*krate).to_string(), pass);
             json(cargo_json(pass, stdout, stderr))
         }
         ["api", "clippy", krate] if is_post => {
@@ -251,7 +258,8 @@ fn handle(
             }
         }
         ["api", "progress"] if is_get => {
-            json(serde_json::to_string(progress).unwrap_or_else(|_| "{}".to_string()))
+            let snapshot = progress.lock().unwrap();
+            json(serde_json::to_string(&*snapshot).unwrap_or_else(|_| "{}".to_string()))
         }
         ["api", "config"] if is_get => {
             // Lets the client build an editor deep-link to the file on the HOST.
@@ -289,16 +297,49 @@ fn main() {
 
     ensure_working_files(&chapters_dir);
 
-    let server = Server::http(&addr).expect("failed to bind address");
+    let server = Arc::new(Server::http(&addr).expect("failed to bind address"));
     // 0.0.0.0 is a bind wildcard, not a browseable host (Safari refuses it),
     // so advertise localhost when we're listening on every interface.
     let display_host = if bind == "0.0.0.0" { "localhost" } else { &bind };
     println!("rust-book-course server → http://{display_host}:{port}");
     println!("  CLIENT_DIR={client_dir}  CONTENT_DIR={content_dir}  CHAPTERS_DIR={chapters_dir}");
 
-    let mut progress: HashMap<String, bool> = HashMap::new();
+    let progress = Arc::new(Mutex::new(HashMap::<String, bool>::new()));
 
-    for mut request in server.incoming_requests() {
+    // A handful of workers share the server so a cold first load's parallel chunk
+    // requests are served concurrently, not serialized behind one another.
+    // Bounded so a burst of "Check" (cargo) requests can't fan out into too many
+    // simultaneous compiles.
+    let workers = thread::available_parallelism().map(|n| n.get()).unwrap_or(4).clamp(2, 8);
+    let mut handles = Vec::with_capacity(workers);
+    for _ in 0..workers {
+        let server = Arc::clone(&server);
+        let progress = Arc::clone(&progress);
+        let client_dir = client_dir.clone();
+        let content_dir = content_dir.clone();
+        let chapters_dir = chapters_dir.clone();
+        handles.push(thread::spawn(move || {
+            serve(&server, &progress, &client_dir, &content_dir, &chapters_dir)
+        }));
+    }
+    for handle in handles {
+        let _ = handle.join();
+    }
+}
+
+/// One worker: pull requests off the shared server and handle them until shutdown.
+fn serve(
+    server: &Server,
+    progress: &Mutex<HashMap<String, bool>>,
+    client_dir: &str,
+    content_dir: &str,
+    chapters_dir: &str,
+) {
+    loop {
+        let mut request = match server.recv() {
+            Ok(req) => req,
+            Err(_) => break,
+        };
         let url = request.url().to_string();
         let path = url.split('?').next().unwrap_or("/").to_string();
         let method = request.method().clone();
@@ -317,10 +358,10 @@ fn main() {
             &segs,
             &path,
             &body,
-            &client_dir,
-            &content_dir,
-            &chapters_dir,
-            &mut progress,
+            client_dir,
+            content_dir,
+            chapters_dir,
+            progress,
         );
         let _ = request.respond(response);
     }
