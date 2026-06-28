@@ -1,0 +1,8 @@
+node_modules
+**/node_modules
+**/target
+client/dist
+client/public/course
+.git
+.serena
+.env*
