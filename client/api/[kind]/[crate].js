@@ -2,8 +2,12 @@
 // Sandbox and return { pass, stdout, stderr } — the only piece of the old Rust
 // server that genuinely needs a backend.
 //
-// Routes (catch-all): POST /api/check/<crate>  and  POST /api/clippy/<crate>
+// Route: POST /api/<kind>/<crate>  where kind ∈ {check, clippy}.
 // Body: raw text = the learner's src/lib.rs.
+//
+// Uses an explicit nested dynamic route ([kind]/[crate]) rather than a single
+// catch-all ([...path]) — on Vercel the catch-all only matched one path segment,
+// so /api/check/<crate> (two segments) 404'd.
 //
 // The chapter crates inherit edition/version from the `chapters/` Cargo
 // workspace, so they are NOT standalone — we materialise the whole workspace in
@@ -38,10 +42,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ pass: false, stdout: '', stderr: 'method not allowed' })
   }
-  // Vercel passes the catch-all segments as req.query.path = ['check', '<crate>'].
-  const segs = req.query.path || []
-  const kind = Array.isArray(segs) ? segs[0] : undefined
-  const crate = Array.isArray(segs) ? segs[1] : undefined
+  const { kind, crate } = req.query
   if ((kind !== 'check' && kind !== 'clippy') || !crate || !CRATE_RE.test(crate)) {
     return res.status(404).json({ pass: false, stdout: '', stderr: 'not found' })
   }
