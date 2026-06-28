@@ -372,9 +372,8 @@ export default function EditorPane({
         <div className="flex items-start gap-1.5 border-b border-edge bg-ink px-3 py-1.5 text-[11px] leading-snug text-crab">
           <span aria-hidden>⚠️</span>
           <span>
-            Demo: <strong>Check</strong> compiles your code in a Vercel Sandbox on the free
-            <strong> Hobby tier</strong> — the first run is slow while it spins up, and it may
-            stop working once the monthly Hobby free limit is reached.
+            Demo: <strong>Check</strong> is going to be <strong>very slow</strong> — this is a
+            hobby project running on a free-tier Vercel account.
           </span>
         </div>
         <div className="flex flex-wrap items-center gap-1.5 border-b border-edge px-3 py-2">
