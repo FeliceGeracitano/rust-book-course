@@ -84,10 +84,15 @@ const RUST_ENV =
 async function runInSandbox(kind, crate, code) {
   const sandbox = await Sandbox.create(createParams())
   try {
-    // 1. Toolchain. A snapshot already has it; otherwise install the latest stable
-    //    via rustup — edition 2024 needs rustc >= 1.85, newer than the distro's
-    //    packaged rust. --no-modify-path since we set PATH explicitly above.
+    // 1. Toolchain. A snapshot already has it; otherwise install it cold.
     if (!SNAPSHOT_ID) {
+      // Rust links test binaries with a C linker (`cc`); the base image ships none.
+      const gcc = await sh(sandbox, 'sudo dnf install -y gcc')
+      if (gcc.exitCode !== 0) {
+        return { pass: false, stdout: gcc.stdout, stderr: `installing gcc failed:\n${gcc.stderr}` }
+      }
+      // Install the latest stable via rustup — edition 2024 needs rustc >= 1.85,
+      // newer than the distro's packaged rust. --no-modify-path since PATH is set.
       const install = await sh(
         sandbox,
         RUST_ENV +

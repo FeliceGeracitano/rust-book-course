@@ -60,6 +60,7 @@ const s = await Sandbox.create({
   timeout: 600_000,
 })
 const sh = (line) => s.runCommand({ cmd: 'bash', args: ['-lc', line] })
+await sh('sudo dnf install -y gcc')  // C linker (cc) — base image has none
 await sh(ENV + "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --component clippy --no-modify-path")
 // Warm target/: materialise every chapter's lib.rs from .exercise.rs and build once.
 await sh(ENV + 'cd chapters && for d in */; do c=${d%/}; mkdir -p $c/src; cp $c/.exercise.rs $c/src/lib.rs; done; cargo test --workspace --no-run || true')
