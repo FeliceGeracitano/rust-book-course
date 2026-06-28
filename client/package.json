@@ -4,12 +4,15 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "predev": "node ../scripts/prepare-content.mjs",
     "dev": "vite",
+    "prebuild": "node ../scripts/prepare-content.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
+    "@vercel/sandbox": "^2.2.1",
     "canvas-confetti": "^1.9.3",
     "framer-motion": "^12.40.0",
     "react": "^18.3.1",
