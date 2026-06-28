@@ -9,6 +9,16 @@ ideas — ownership, smart pointers, concurrency, async — click.
 
 <img width="1866" height="1072" alt="Rust Book Course running locally" src="https://github.com/user-attachments/assets/366e6540-c27b-40fb-a488-b29caad2335e" />
 
+> **Built to run locally.** This course is designed for your own machine (see **Quick start**
+> below) — it compiles and tests your Rust with a local toolchain.
+>
+> There's also an **experimental Vercel deployment** on the
+> [`vercel-sandbox-deploy`](https://github.com/FeliceGeracitano/rust-book-course/tree/vercel-sandbox-deploy)
+> branch — a trimmed, all-Vercel build that runs each chapter's tests in a Vercel Sandbox.
+> **Live demo:** <https://rust-book-course.vercel.app>
+> _(free Hobby tier — the first run is slow while the sandbox spins up, and it may stop
+> working once monthly free limits are reached)._
+
 ---
 
 ## Quick start
