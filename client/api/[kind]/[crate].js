@@ -21,6 +21,11 @@
 
 import { Sandbox } from '@vercel/sandbox'
 
+// @vercel/sandbox's API client calls the deprecated url.parse() internally
+// (DEP0169). It's harmless and not our code to fix — silence it so it doesn't
+// clutter the function logs.
+process.noDeprecation = true
+
 // Hobby caps function duration at 300s; a cold toolchain install + compile can
 // approach a minute. Bake a snapshot (see DEPLOY-VERCEL.md) to make it fast/cheap.
 export const config = { maxDuration: 300 }
