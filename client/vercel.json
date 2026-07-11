@@ -3,6 +3,12 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "git": {
+    "deploymentEnabled": {
+      "*": false,
+      "vercel-sandbox-deploy": true
+    }
+  },
   "rewrites": [
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
