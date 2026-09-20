@@ -113,3 +113,41 @@ it('returns to the starting lesson with Back after opening the root URL', async 
   act(() => window.history.back())
   await screen.findByRole('heading', { name: '1.1 Installation' })
 })
+it('collapses the desktop sidebar and remembers the choice across reloads', async () => {
+  const app = render(<App />)
+  await screen.findByRole('heading', { name: '1.1 Installation' })
+  expect(
+    screen.getByRole('navigation', { name: 'Course chapters' }),
+  ).toBeInTheDocument()
+  const toggle = screen.getByRole('button', { name: 'Toggle sidebar' })
+  expect(toggle).toHaveAttribute('aria-expanded', 'true')
+  await userEvent.click(toggle)
+  expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  expect(
+    screen.queryByRole('navigation', { name: 'Course chapters' }),
+  ).not.toBeInTheDocument()
+  expect(localStorage.getItem('rust-book-course:sidebar')).toBe('closed')
+  app.unmount()
+  render(<App />)
+  await screen.findByRole('heading', { name: '1.1 Installation' })
+  expect(
+    screen.getByRole('button', { name: 'Toggle sidebar' }),
+  ).toHaveAttribute('aria-expanded', 'false')
+  expect(
+    screen.queryByRole('navigation', { name: 'Course chapters' }),
+  ).not.toBeInTheDocument()
+})
+it('closes the mobile chapter drawer after choosing a lesson', async () => {
+  render(<App />)
+  await screen.findByRole('heading', { name: '1.1 Installation' })
+  await userEvent.click(screen.getByRole('button', { name: 'Toggle chapters' }))
+  const drawer = document.getElementById('chapter-drawer')!
+  await userEvent.click(
+    within(drawer).getByRole('link', { name: /1\.2 Hello, World!/ }),
+  )
+  await screen.findByRole('heading', { name: '1.2 Hello, World!' })
+  expect(
+    screen.getByRole('button', { name: 'Toggle chapters' }),
+  ).toHaveAttribute('aria-expanded', 'false')
+  expect(document.getElementById('chapter-drawer')).toBeNull()
+})
