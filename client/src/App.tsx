@@ -1,20 +1,29 @@
 import { useEffect, useRef, useState } from 'react'
 import { course, lessons } from './content'
-import { getProgress, rememberLesson, useProgress } from './progress'
+import { rememberLesson, useProgress } from './progress'
 import ChapterTree from './components/ChapterTree'
+import Home from './components/Home'
 import LessonView from './components/LessonView'
 
-function currentId() {
-  return (
-    window.location.hash.slice(1) || getProgress().lastLesson || lessons[0].id
-  )
+const SIDEBAR_KEY = 'rust-book-course:sidebar'
+function readSidebar() {
+  try {
+    return localStorage.getItem(SIDEBAR_KEY) !== 'closed'
+  } catch {
+    return true
+  }
 }
+// An empty hash is the landing page; everything else must match a lesson.
+const currentId = () => window.location.hash.slice(1)
 
 export default function App() {
   const [id, setId] = useState(currentId)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  // Desktop sidebar preference persists; the mobile drawer is always transient.
+  const [sidebarOpen, setSidebarOpen] = useState(readSidebar)
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const progress = useProgress()
   const main = useRef<HTMLElement>(null)
+  const home = id === ''
   const index = lessons.findIndex((lesson) => lesson.id === id)
   const lesson = lessons[index]
   const completed = lessons.filter((item) =>
@@ -24,22 +33,27 @@ export default function App() {
   useEffect(() => {
     const navigate = () => {
       setId(currentId())
-      setSidebarOpen(false)
+      setDrawerOpen(false)
       main.current?.focus()
     }
     window.addEventListener('hashchange', navigate)
     return () => window.removeEventListener('hashchange', navigate)
   }, [])
   useEffect(() => {
-    if (lesson) {
-      // Give the initial/resumed lesson a stable history entry before lastLesson changes.
-      if (!window.location.hash)
-        window.history.replaceState(null, '', `#${lesson.id}`)
+    try {
+      localStorage.setItem(SIDEBAR_KEY, sidebarOpen ? 'open' : 'closed')
+    } catch {
+      /* Preference stays in memory if storage is unavailable. */
+    }
+  }, [sidebarOpen])
+  useEffect(() => {
+    if (home) document.title = 'Rust Book Course'
+    else if (lesson) {
       rememberLesson(lesson.id)
       document.title = `${lesson.sub.title} · Rust Book Course`
     } else document.title = 'Lesson not found · Rust Book Course'
     main.current?.scrollTo?.(0, 0)
-  }, [lesson])
+  }, [home, lesson])
 
   return (
     <div className="flex h-full flex-col">
@@ -55,11 +69,20 @@ export default function App() {
       </a>
       <header className="flex items-center gap-3 border-b border-edge bg-ink-soft px-4 py-4">
         <button
+          onClick={() => setDrawerOpen(!drawerOpen)}
+          aria-expanded={drawerOpen}
+          aria-controls="chapter-drawer"
+          className="secondary md:hidden"
+          aria-label="Toggle chapters"
+        >
+          ☰
+        </button>
+        <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           aria-expanded={sidebarOpen}
           aria-controls="chapter-sidebar"
-          className="secondary lg:hidden"
-          aria-label="Toggle chapters"
+          className="secondary hidden md:inline-flex"
+          aria-label="Toggle sidebar"
         >
           ☰
         </button>
@@ -67,7 +90,9 @@ export default function App() {
           🦀
         </span>
         <div>
-          <span className="font-semibold tracking-tight">{course.title}</span>
+          <a href="#" className="font-semibold tracking-tight">
+            {course.title}
+          </a>
           <p className="text-xs text-muted">Read. Predict. Explore.</p>
         </div>
         <span className="ml-auto text-right text-xs text-muted">
@@ -82,18 +107,25 @@ export default function App() {
         </a>
       </header>
       <div className="relative flex min-h-0 flex-1">
-        <div
-          id="chapter-sidebar"
-          className={`${sidebarOpen ? 'absolute inset-y-0 left-0 z-20 flex shadow-xl' : 'hidden'} w-[min(20rem,90vw)] shrink-0 lg:static lg:flex lg:w-72`}
-        >
-          <ChapterTree selectedId={id} />
-        </div>
+        {drawerOpen && (
+          <>
+            <div
+              id="chapter-drawer"
+              className="absolute inset-y-0 left-0 z-20 flex w-[min(20rem,90vw)] shadow-xl md:hidden"
+            >
+              <ChapterTree selectedId={id} />
+            </div>
+            <button
+              aria-label="Close chapters"
+              className="absolute inset-0 z-10 bg-black/50 md:hidden"
+              onClick={() => setDrawerOpen(false)}
+            />
+          </>
+        )}
         {sidebarOpen && (
-          <button
-            aria-label="Close chapters"
-            className="absolute inset-0 z-10 bg-black/50 lg:hidden"
-            onClick={() => setSidebarOpen(false)}
-          />
+          <aside id="chapter-sidebar" className="hidden w-72 shrink-0 md:flex">
+            <ChapterTree selectedId={id} />
+          </aside>
         )}
         <main
           id="lesson-content"
@@ -101,7 +133,9 @@ export default function App() {
           tabIndex={-1}
           className="min-w-0 flex-1 overflow-y-auto px-5 py-8 outline-none sm:px-10"
         >
-          {lesson ? (
+          {home ? (
+            <Home />
+          ) : lesson ? (
             <LessonView
               key={lesson.id}
               lesson={lesson}

@@ -2,7 +2,7 @@ import { beforeEach, expect, it, vi } from 'vitest'
 import { act, render, screen, within, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from './App'
-import { reloadProgress, STORAGE_KEY } from './progress'
+import { markComplete, reloadProgress, STORAGE_KEY } from './progress'
 vi.mock('./components/CodeBlock', () => ({
   default: ({ children }: { children: string }) => <code>{children}</code>,
 }))
@@ -11,14 +11,20 @@ beforeEach(() => {
   localStorage.clear()
   reloadProgress()
 })
-it('loads without an API, navigates, saves progress and resumes after remount', async () => {
+async function startCourse() {
+  await screen.findByRole('heading', { name: 'Rust Book Course' })
+  await userEvent.click(screen.getByRole('link', { name: /Start the course/ }))
+  await screen.findByRole('heading', { name: '1.1 Installation' })
+}
+it('loads without an API, navigates, saves progress and offers to continue after remount', async () => {
   const fetch = vi
     .spyOn(window, 'fetch')
     .mockRejectedValue(new Error('No backend'))
   try {
     const user = userEvent.setup()
     const app = render(<App />)
-    await screen.findByRole('heading', { name: '1.1 Installation' })
+    await startCourse()
+    expect(window.location.hash).toBe('#ch01_getting_started/installation')
     await user.click(screen.getByRole('button', { name: 'A. rustup' }))
     expect(screen.getByRole('status')).toHaveTextContent('Correct')
     await user.click(
@@ -39,6 +45,9 @@ it('loads without an API, navigates, saves progress and resumes after remount', 
     window.history.replaceState(null, '', '/')
     reloadProgress()
     render(<App />)
+    await user.click(
+      await screen.findByRole('link', { name: /Continue: 1\.2 Hello, World!/ }),
+    )
     await screen.findByRole('heading', { name: '1.2 Hello, World!' })
     expect(JSON.parse(localStorage.getItem(STORAGE_KEY)!).completed).toEqual([
       'ch01_getting_started/installation',
@@ -46,6 +55,35 @@ it('loads without an API, navigates, saves progress and resumes after remount', 
   } finally {
     fetch.mockRestore()
   }
+})
+it('lists every chapter with its progress on the landing page', async () => {
+  markComplete('ch01_getting_started/installation', true)
+  render(<App />)
+  const card = await screen.findByRole('link', { name: /Getting Started/ })
+  expect(card).toHaveAttribute('href', '#ch01_getting_started/installation')
+  expect(card).toHaveTextContent('3 lessons · 1 done')
+  expect(screen.getByRole('link', { name: /Appendix/ })).toHaveAttribute(
+    'href',
+    '#appendix/a_keywords',
+  )
+  expect(screen.getByText('1 / 87 lessons done')).toBeInTheDocument()
+  expect(
+    screen.queryByRole('link', { name: /Start from the beginning/ }),
+  ).not.toBeInTheDocument()
+})
+it('offers to continue from the last lesson or restart from the header link', async () => {
+  window.history.replaceState(null, '', '/#ch03_common_concepts/data_types')
+  render(<App />)
+  await screen.findByRole('heading', { name: '3.2 Data Types' })
+  await userEvent.click(screen.getByRole('link', { name: 'Rust Book Course' }))
+  await screen.findByRole('heading', { name: 'Rust Book Course' })
+  expect(
+    screen.getByRole('link', { name: /Continue: 3\.2 Data Types/ }),
+  ).toHaveAttribute('href', '#ch03_common_concepts/data_types')
+  expect(
+    screen.getByRole('link', { name: 'Start from the beginning' }),
+  ).toHaveAttribute('href', '#ch01_getting_started/installation')
+  await waitFor(() => expect(document.title).toBe('Rust Book Course'))
 })
 it('opens direct links, reacts to history and recovers from unknown lessons', async () => {
   window.history.replaceState(null, '', '/#ch03_common_concepts/data_types')
@@ -66,7 +104,7 @@ it('opens direct links, reacts to history and recovers from unknown lessons', as
 })
 it('allows completion to be undone and exposes the mobile chapter menu state', async () => {
   render(<App />)
-  await screen.findByRole('heading', { name: '1.1 Installation' })
+  await startCourse()
   await userEvent.click(screen.getByRole('button', { name: 'Toggle chapters' }))
   expect(
     screen.getByRole('button', { name: 'Toggle chapters' }),
@@ -101,9 +139,9 @@ it('preserves the active trace step when quiz and completion progress change', a
   )
   expect(screen.getByText('2 / 4')).toBeInTheDocument()
 })
-it('returns to the starting lesson with Back after opening the root URL', async () => {
+it('walks Back through lessons to the landing page', async () => {
   render(<App />)
-  await screen.findByRole('heading', { name: '1.1 Installation' })
+  await startCourse()
   await userEvent.click(
     within(
       screen.getByRole('navigation', { name: 'Lesson navigation' }),
@@ -112,4 +150,47 @@ it('returns to the starting lesson with Back after opening the root URL', async 
   await screen.findByRole('heading', { name: '1.2 Hello, World!' })
   act(() => window.history.back())
   await screen.findByRole('heading', { name: '1.1 Installation' })
+  act(() => window.history.back())
+  await screen.findByRole('heading', { name: 'Rust Book Course' })
+  expect(
+    screen.getByRole('link', { name: /Continue: 1\.1 Installation/ }),
+  ).toBeInTheDocument()
+})
+it('collapses the desktop sidebar and remembers the choice across reloads', async () => {
+  const app = render(<App />)
+  await screen.findByRole('heading', { name: 'Rust Book Course' })
+  expect(
+    screen.getByRole('navigation', { name: 'Course chapters' }),
+  ).toBeInTheDocument()
+  const toggle = screen.getByRole('button', { name: 'Toggle sidebar' })
+  expect(toggle).toHaveAttribute('aria-expanded', 'true')
+  await userEvent.click(toggle)
+  expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  expect(
+    screen.queryByRole('navigation', { name: 'Course chapters' }),
+  ).not.toBeInTheDocument()
+  expect(localStorage.getItem('rust-book-course:sidebar')).toBe('closed')
+  app.unmount()
+  render(<App />)
+  await screen.findByRole('heading', { name: 'Rust Book Course' })
+  expect(
+    screen.getByRole('button', { name: 'Toggle sidebar' }),
+  ).toHaveAttribute('aria-expanded', 'false')
+  expect(
+    screen.queryByRole('navigation', { name: 'Course chapters' }),
+  ).not.toBeInTheDocument()
+})
+it('closes the mobile chapter drawer after choosing a lesson', async () => {
+  render(<App />)
+  await startCourse()
+  await userEvent.click(screen.getByRole('button', { name: 'Toggle chapters' }))
+  const drawer = document.getElementById('chapter-drawer')!
+  await userEvent.click(
+    within(drawer).getByRole('link', { name: /1\.2 Hello, World!/ }),
+  )
+  await screen.findByRole('heading', { name: '1.2 Hello, World!' })
+  expect(
+    screen.getByRole('button', { name: 'Toggle chapters' }),
+  ).toHaveAttribute('aria-expanded', 'false')
+  expect(document.getElementById('chapter-drawer')).toBeNull()
 })
