@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { course, lessons } from './content'
-import { getProgress, rememberLesson, useProgress } from './progress'
+import { rememberLesson, useProgress } from './progress'
 import ChapterTree from './components/ChapterTree'
+import Home from './components/Home'
 import LessonView from './components/LessonView'
 
 const SIDEBAR_KEY = 'rust-book-course:sidebar'
@@ -12,11 +13,8 @@ function readSidebar() {
     return true
   }
 }
-function currentId() {
-  return (
-    window.location.hash.slice(1) || getProgress().lastLesson || lessons[0].id
-  )
-}
+// An empty hash is the landing page; everything else must match a lesson.
+const currentId = () => window.location.hash.slice(1)
 
 export default function App() {
   const [id, setId] = useState(currentId)
@@ -25,6 +23,7 @@ export default function App() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const progress = useProgress()
   const main = useRef<HTMLElement>(null)
+  const home = id === ''
   const index = lessons.findIndex((lesson) => lesson.id === id)
   const lesson = lessons[index]
   const completed = lessons.filter((item) =>
@@ -48,15 +47,13 @@ export default function App() {
     }
   }, [sidebarOpen])
   useEffect(() => {
-    if (lesson) {
-      // Give the initial/resumed lesson a stable history entry before lastLesson changes.
-      if (!window.location.hash)
-        window.history.replaceState(null, '', `#${lesson.id}`)
+    if (home) document.title = 'Rust Book Course'
+    else if (lesson) {
       rememberLesson(lesson.id)
       document.title = `${lesson.sub.title} · Rust Book Course`
     } else document.title = 'Lesson not found · Rust Book Course'
     main.current?.scrollTo?.(0, 0)
-  }, [lesson])
+  }, [home, lesson])
 
   return (
     <div className="flex h-full flex-col">
@@ -93,7 +90,9 @@ export default function App() {
           🦀
         </span>
         <div>
-          <span className="font-semibold tracking-tight">{course.title}</span>
+          <a href="#" className="font-semibold tracking-tight">
+            {course.title}
+          </a>
           <p className="text-xs text-muted">Read. Predict. Explore.</p>
         </div>
         <span className="ml-auto text-right text-xs text-muted">
@@ -134,7 +133,9 @@ export default function App() {
           tabIndex={-1}
           className="min-w-0 flex-1 overflow-y-auto px-5 py-8 outline-none sm:px-10"
         >
-          {lesson ? (
+          {home ? (
+            <Home />
+          ) : lesson ? (
             <LessonView
               key={lesson.id}
               lesson={lesson}
