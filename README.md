@@ -48,11 +48,6 @@ Exercises start with `todo!()` and fail until completed; each chapter has a `SOL
 - `chapters/` — optional Rust exercises
 - `docs/refactor-plan.md` — why the runner was replaced by a static site
 
-## Deploy
-
-Amplify uses `amplify.yml` to install the client dependencies, run the tests, build the
-site, and publish `client/dist`. Use the repository root as the build root so `content/`
-is available. Lesson URLs are fragments, so no SPA rewrite is needed.
 
 ## Credits
 
