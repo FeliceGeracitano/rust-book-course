@@ -31,7 +31,24 @@ Second, *error handling as values*: a wrong argument count produces an `Err`
 with a clear message rather than a crash. This is the pattern the Book uses to
 move logic out of `main` and into a library that tests can exercise directly.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What should main do after extracting configuration parsing and the application logic?",
+  "options": [
+    "Contain all parsing, searching, and output logic",
+    "Hide all failures by returning empty results",
+    "Connect the pieces and handle errors at the entry point"
+  ],
+  "answer": 2,
+  "explain": "A thin entry point leaves reusable logic in functions that can be tested independently of process arguments and exit behavior."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Implement `Config::build` in `chapters/ch12_io_project/src/lib.rs` so it returns
 the right `Err` messages for too few and too many arguments, then run:
 

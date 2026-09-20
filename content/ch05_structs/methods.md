@@ -41,7 +41,23 @@ impl Rectangle {
 let sq = Rectangle::square(20);
 ```
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What does &self mean in a method signature?",
+  "options": [
+    "Create a fresh instance",
+    "Borrow this instance immutably",
+    "Move this instance into the method"
+  ],
+  "answer": 1,
+  "explain": "&self is shorthand for self: &Self. Use &mut self for exclusive mutable access or self to consume the instance."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 In `chapters/ch05_structs/src/lib.rs`, implement the `area` and `can_hold`
 methods plus the `square` associated function on `Rectangle`, then run:

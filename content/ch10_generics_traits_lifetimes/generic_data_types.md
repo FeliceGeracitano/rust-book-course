@@ -30,7 +30,24 @@ assert_eq!(first(&[10, 20, 30]), Some(10));
 assert_eq!(first(&['a', 'b']), Some('a'));
 ```
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Why does a generic function that compares T values need a trait bound?",
+  "options": [
+    "Generic functions run without type checking",
+    "The compiler needs to know T supports the comparison",
+    "Every generic type supports all operators"
+  ],
+  "answer": 1,
+  "explain": "A bound such as T: PartialOrd states the operations the implementation requires. Rust checks generic code against those stated capabilities."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Implement `largest` and the `Pair<T>` methods in
 `chapters/ch10_generics_traits_lifetimes/src/lib.rs`, then run:
 

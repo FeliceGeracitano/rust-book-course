@@ -25,7 +25,24 @@ a meaning. Because real `env::args` depends on how the program was launched, the
 exercises work on a plain `&[&str]` slice instead, keeping the logic pure and
 testable.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What is usually the first value from std::env::args()?",
+  "options": [
+    "An empty string on every platform",
+    "The program’s invocation path or name",
+    "The first search query"
+  ],
+  "answer": 1,
+  "explain": "The first argument identifies the invoked program. User-supplied arguments come after it, so parsing must account for that position."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Open `chapters/ch12_io_project/src/lib.rs` and start filling in the `todo!()`
 bodies, then run:
 

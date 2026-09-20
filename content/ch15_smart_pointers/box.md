@@ -25,7 +25,24 @@ let list = Cons(1, Box::new(Cons(2, Box::new(Nil))));
 The `Box` owns its contents: when the `Box` goes out of scope, both the pointer
 and the heap data are freed. You dereference it with `*` just like a reference.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Why can Box make a recursive enum have a known size?",
+  "options": [
+    "The compiler reserves infinite stack space",
+    "Box itself has a fixed size even when it points to another node",
+    "Box removes recursion from the program"
+  ],
+  "answer": 1,
+  "explain": "Putting the recursive part behind indirection breaks the infinite-size layout. The pointed-to data lives separately from the box value."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 In `chapters/ch15_smart_pointers/src/lib.rs`, complete `List::sum` so it walks
 the cons list and adds every value (returning `0` for `Nil`). Then run:
 

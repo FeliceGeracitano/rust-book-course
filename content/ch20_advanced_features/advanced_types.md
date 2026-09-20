@@ -24,7 +24,23 @@ The newtype is a genuinely distinct type. This chapter also touches the
 never type `!` and dynamically sized types like `str`, but the newtype is the
 workhorse you will reach for most often.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Does type Kilometers = i32 create a distinct type that cannot mix with i32?",
+  "options": [
+    "Yes: aliases allocate a wrapper on the heap",
+    "No: it is an alias for the same type",
+    "Yes: aliases always enforce new type boundaries"
+  ],
+  "answer": 1,
+  "explain": "Use a newtype such as struct Kilometers(i32) when you need a distinct type. An alias only supplies another name."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 In `chapters/ch20_advanced_features/src/lib.rs`, finish the `Meters` newtype:
 `new`, `value`, and its `Add` impl so two `Meters` add while keeping their unit.

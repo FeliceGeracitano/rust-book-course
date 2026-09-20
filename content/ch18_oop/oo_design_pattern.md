@@ -26,7 +26,24 @@ with the result. Content stays hidden until a `Published` state chooses to
 reveal it; a `Draft` returns an empty string. Adding a new stage means adding a
 type, not editing every method — the win the pattern is built for.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What can a draft-to-published state transition control?",
+  "options": [
+    "Whether Rust performs type checking",
+    "Which operations and content are available in each state",
+    "Only the color of a log message"
+  ],
+  "answer": 1,
+  "explain": "The state pattern encodes behavior that depends on the current state. Separate state types can also make invalid transitions impossible to express."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 In `chapters/ch18_oop/src/lib.rs`, complete `Post` and the `Draft`,
 `PendingReview`, and `Published` states (Exercise 3). Then run:
 

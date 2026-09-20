@@ -23,7 +23,24 @@ The classic combination is `Rc<RefCell<T>>`: `Rc` gives many owners, and
 at the same cell, a change made through one handle is visible through all of
 them.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What happens when borrow_mut is called while a RefCell already has a live shared borrow?",
+  "options": [
+    "It panics at runtime",
+    "The compiler always rejects the program",
+    "Both borrows silently become mutable"
+  ],
+  "answer": 0,
+  "explain": "RefCell enforces borrowing rules at runtime. try_borrow_mut returns an error instead if you want to handle a borrow conflict."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 In `chapters/ch15_smart_pointers/src/lib.rs`, implement `Counter::increment` and
 `Counter::get` using `borrow_mut()` and `borrow()`. Confirm that two clones
 share one underlying count. Then run:

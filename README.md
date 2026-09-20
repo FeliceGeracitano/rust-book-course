@@ -1,120 +1,98 @@
 # Rust Book Course 🦀
 
-An interactive, self-hosted course for learning Rust, structured after
-[**The Rust Programming Language**](https://doc.rust-lang.org/book/) (2024 edition).
+Discover Rust through **87 interactive lessons** following
+[The Rust Programming Language](https://doc.rust-lang.org/book/).
+Read a short explanation, make a prediction, and explore why the answer works.
+No Rust installation, Docker, backend, or account is needed to take the course.
 
-Read each lesson in the browser, write **real Rust** in an in-page editor (or your own),
-and hit **Check** to run that chapter's tests. Interactive visualizations make the hard
-ideas — ownership, smart pointers, concurrency, async — click.
+## Run locally
 
-<img width="1866" height="1072" alt="Rust Book Course running locally" src="https://github.com/user-attachments/assets/366e6540-c27b-40fb-a488-b29caad2335e" />
-
-> **Built to run locally.** This course is designed for your own machine (see **Quick start**
-> below) — it compiles and tests your Rust with a local toolchain.
->
-> There's also an **experimental Vercel deployment** on the
-> [`vercel-sandbox-deploy`](https://github.com/FeliceGeracitano/rust-book-course/tree/vercel-sandbox-deploy)
-> branch — a trimmed, all-Vercel build that runs each chapter's tests in a Vercel Sandbox.
-> **Live demo:** <https://rust-book-course.vercel.app>
-> _(free Hobby tier — the first run is slow while the sandbox spins up, and it may stop
-> working once monthly free limits are reached)._
-
----
-
-## Quick start
+Use Node.js 22.22.2+, 24.15+, or 26+:
 
 ```bash
-docker compose up        # → http://localhost:8080
+cd client
+npm ci
+npm run dev
 ```
 
-Only **Docker** is required (the container carries the Rust + Node toolchains). A local
-Rust install is optional and only nice-to-have for editing in your own terminal.
+Open the URL printed by Vite. `npm run build` type-checks and produces `client/dist`;
+`npm run preview` serves that production build locally.
 
-Then: pick a chapter → read the lesson → make its tests pass → **Check** → 🎉.
+## Learn by discovery
 
----
+- All 21 Book chapters plus the appendix, with a question and explanatory feedback
+  in every lesson. Answers can be retried.
+- Five guided traces covering moves, borrowing, error propagation, iterators, and
+  reference counting. These illustrate authored examples; they do not execute code.
+- Interactive chapter visualizations for ownership, collections, smart pointers,
+  concurrency, and async.
+- Previous/next navigation, shareable lesson links, and a mobile chapter menu.
+- Answers, attempts, lesson completion, and your last lesson saved in this browser.
+  Completion is up to you; a quiz score does not prevent moving ahead. If browser
+  storage is unavailable, progress lasts for the current page session.
 
-## How it works
+The earlier browser editor and Rust runner have been removed. The course now uses
+static assets, inspired by `go-tour-course`. See the
+[refactor plan and tradeoffs](docs/refactor-plan.md).
 
-```
-┌── Chapters ──┐   ┌──────── Lesson ────────┐   ┌──────── Editor ────────┐
-│ 1 Getting…  ✓│   │  4.1 What is Ownership │   │  fn main() { … }        │
-│ 4 Ownership ●│   │  [ownership viz ▸]     │   │  ⚡ rust-analyzer        │
-│ …            │   │  prose + examples      │   │  [Check][Clippy][Hints] │
-└──────────────┘   └────────────────────────┘   └──── pass / fail ───────┘
-```
+## Optional terminal practice
 
-Each chapter is a real Cargo crate. Exercises ship **failing on purpose** (`todo!()`s) —
-your job is to make them green. **Check** runs `cargo test` for that chapter; **Clippy**
-runs the linter; **Hints** and **Reveal solution** are a tab away when you're stuck.
-
-## Two ways to work
-
-**In the browser** — edit in the built-in Monaco editor (rust-analyzer completions, hover
-types, live error squiggles), then Check. Your edits autosave.
-
-**In your terminal** — edit the files directly and run tests yourself:
+The original Cargo exercises and solutions remain in `chapters/`. Install Rust
+separately if you want to write and test real code. From the repository root:
 
 ```bash
+node scripts/prepare-exercises.mjs
 cd chapters
-cargo test -p ch01_getting_started      # one chapter
+cargo test -p ch01_getting_started
 ```
 
-Both edit the same files, so you can mix and match.
+The preparation script copies each committed `.exercise.rs` to `src/lib.rs` **only
+when that working file is missing**. Your existing edits are preserved. Exercises
+start with `todo!()` and are expected to fail until completed. Each chapter’s
+`SOLUTION.md` offers help. These tests do not change browser progress.
 
----
-
-## Features
-
-- 🦀 **All 21 Book chapters + appendix** — real exercises, tests, solutions, and prose.
-- ✍️ **In-browser Monaco editor** — resizable, with autocomplete and a **↺ Reset** to
-  restore the pristine exercise.
-- 🧠 **rust-analyzer** — semantic completions, hover types, and live error squiggles via
-  a sidecar (falls back to a curated list if unavailable).
-- ✅ **Check / Clippy** — run tests and idiomatic-Rust lints; output is color-highlighted
-  in a resizable, tabbed panel (Output · Hints · Solution).
-- 🎨 **Interactive visualizations** — ownership, collections, smart pointers, concurrency,
-  and async, animated with step controls.
-- 🧩 **Quality-of-life** — collapsible sidebar, progress ticks, confetti on pass, and an
-  "open in your editor" deep link.
-
----
-
-## Project layout
-
-| Path | What |
-|------|------|
-| `chapters/` | One Cargo crate per chapter — the Rust you edit. `.exercise.rs` is the pristine original; `src/lib.rs` is your (git-ignored) working copy. |
-| `content/`  | Lesson prose (`content/<crate>/*.md`) + `course.json` (the table of contents). |
-| `server/`   | Rust `tiny_http` server — serves the UI, lessons, and runs your tests. |
-| `client/`   | React + Vite UI (chapter tree, lessons, editor, visualizations). |
-| `lsp/`      | rust-analyzer ↔ browser WebSocket bridge (LSP). |
-
-## Tech stack
-
-**Server** Rust · `tiny_http` · `serde_json`
-**Client** React · Vite · TypeScript · Tailwind v4 · Shiki · Framer Motion · Monaco
-**Language intelligence** rust-analyzer over a Node WebSocket bridge
-**Run** Docker Compose (app + lsp)
-
-## Develop the UI
+## Verify changes
 
 ```bash
-cd client && npm install && npm run dev   # Vite on :5173, proxies /api → :8080
+cd client
+npm test
+npm run build
 ```
 
----
+Tests validate all lessons and discovery blocks, exercise navigation and interactions,
+and cover progress recovery and the optional exercise initializer. CI runs these
+same checks. No Rust compiler is required for building or testing the site.
+
+## Deploy with AWS Amplify Hosting
+
+Connect this repository and the desired branch to a static Amplify Hosting app.
+Use the repository root as the build root so both `client/` and `content/` are available.
+The committed [`amplify.yml`](amplify.yml) selects Node 22, runs `npm ci`, runs the tests
+and type-checked build, and publishes `client/dist`. No backend environment variables
+or AWS credentials are needed by the client. AWS account setup and connecting the
+repository happen in the Amplify console; this PR does not create or deploy an app.
+
+Lesson URLs use fragments, for example `/#ch04_ownership/what_is_ownership`, so direct
+links and refreshes need no SPA rewrite. Follow the
+[AWS buildspec reference](https://docs.aws.amazon.com/amplify/latest/userguide/yml-specification-syntax.html)
+when adjusting the hosting build. Automatic Vercel deployments remain disabled.
+
+## Layout
+
+- `content/course.json` — chapter and lesson order.
+- `content/**/*.md` — lesson prose and JSON `quiz` / `trace` fences.
+- `client/` — React, TypeScript, Vite, Tailwind, Shiki, and visualizations.
+- `chapters/` — optional Rust exercises and solutions.
+- `scripts/prepare-exercises.mjs` — safe initializer for local exercise files.
+
+See [content authoring](content/README.md) to add or revise a lesson.
 
 ## Credits & attribution
 
-This course is **derived from [The Rust Programming Language](https://doc.rust-lang.org/book/)**
-("the Book") — its chapter structure, topic order, and learning progression all come from
-there. The Book is written and maintained by the Rust team and contributors.
+This unofficial companion follows the chapter structure and learning progression of
+[The Rust Programming Language](https://doc.rust-lang.org/book/), written and maintained
+by the Rust team and contributors. It is not affiliated with or endorsed by the Rust
+project. Read the Book for the authoritative text.
 
-This repo is an **unofficial** companion: it reorganizes the Book's curriculum into
-hands-on, test-driven exercises plus a small local UI. It is **not affiliated with or
-endorsed by** the Rust project. For the authoritative text, always read the Book itself:
-<https://doc.rust-lang.org/book/>.
-
-The Book is licensed under **MIT OR Apache-2.0**; any prose adapted from it here is used
-under those terms. See the Book's repository: <https://github.com/rust-lang/book>.
+The Book is licensed under MIT OR Apache-2.0; prose adapted here is used under those
+terms. See the [Book repository](https://github.com/rust-lang/book).

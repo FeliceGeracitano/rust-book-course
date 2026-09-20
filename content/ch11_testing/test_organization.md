@@ -30,7 +30,23 @@ usable. The tests for this chapter live in `tests/exercises.rs` for that reason.
 Note: only library crates can be integration-tested. That's a common reason to
 split a project's logic into a `lib.rs` with a thin `main.rs` on top.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Which API can tests in the tests/ directory normally access?",
+  "options": [
+    "Every private function in every module",
+    "Only binary main functions",
+    "The library’s public API"
+  ],
+  "answer": 2,
+  "explain": "Integration tests are separate crates and exercise the library as an external consumer. Unit tests inside the source can test private implementation details."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 Complete the public items in `chapters/ch11_testing/src/lib.rs` so the
 integration tests in `tests/exercises.rs` pass:

@@ -33,7 +33,24 @@ fn first_char(s: &str) -> char {
 }
 ```
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What must the else branch of let...else do?",
+  "options": [
+    "Continue normally to the next statement",
+    "Diverge, for example by returning from the function",
+    "Produce a replacement value for the pattern"
+  ],
+  "answer": 1,
+  "explain": "The else branch must not continue into code where the pattern bindings are assumed to exist. return, break in a suitable loop, or panic can diverge."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Complete `describe_quarter` (with `if let`) and `username_or_guest` (with
 `let...else`) in `chapters/ch06_enums_pattern_matching/src/lib.rs`, then run:
 

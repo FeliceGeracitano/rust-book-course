@@ -37,7 +37,24 @@ match n {
 range while binding the number to `id` for use in the arm — something neither the
 range nor a plain binding can do alone.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What does the @ operator do in a pattern such as id @ 3..=7?",
+  "options": [
+    "Ignores every value in the range",
+    "Binds the matched value while also checking a pattern",
+    "Takes a reference to the value"
+  ],
+  "answer": 1,
+  "explain": "The @ binding lets you retain the value matched by a more specific pattern, here an inclusive range."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Complete the `todo!()` bodies in
 `chapters/ch19_patterns_matching/src/lib.rs`, then run:
 

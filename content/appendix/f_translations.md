@@ -17,3 +17,17 @@ Appendix F (link above) and in the
 ---
 
 📖 **Read it on the official Rust Book** — the full, authoritative version: <https://doc.rust-lang.org/book/appendix-06-translation.html>
+
+```quiz
+{
+  "id": "discovery",
+  "question": "What should you check when using a translation of the Rust Book?",
+  "options": [
+    "Whether it changes the Rust keywords into the translated language",
+    "Whether Rust forbids using more than one language for documentation",
+    "Which edition and revision it follows"
+  ],
+  "answer": 2,
+  "explain": "Translations can differ in revision or coverage. Compare the documented edition and use the current official text when a detail is unclear."
+}
+```

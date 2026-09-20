@@ -24,7 +24,24 @@ you want to change. Profiles let you trade compile time against runtime
 performance per build kind, which is why a fast `dev` loop and a fast `release`
 binary can coexist.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Which command uses the optimized release build profile?",
+  "options": [
+    "cargo build --release",
+    "cargo build",
+    "cargo new --release"
+  ],
+  "answer": 0,
+  "explain": "cargo build uses the dev profile by default. --release selects the release profile, whose defaults favor optimized output over fast compilation."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Implement `opt_level` in `chapters/ch14_cargo_crates_io/src/lib.rs` so it maps
 each profile name to its default optimization level, then run:
 

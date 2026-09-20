@@ -27,7 +27,24 @@ pub fn add_one(x: i32) -> i32 {
 }
 ```
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What should you review before publishing a library crate?",
+  "options": [
+    "Only whether its folder name is short",
+    "Nothing, because published releases can always be replaced",
+    "Its public API, documentation, license, metadata, and packaged files"
+  ],
+  "answer": 2,
+  "explain": "Publishing makes a version available to other users. Review the package contents and API before publishing; a released version is not an editable upload."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Implement `SemVer::parse`, its ordering, and `is_compatible_with` in
 `chapters/ch14_cargo_crates_io/src/lib.rs`, then run:
 

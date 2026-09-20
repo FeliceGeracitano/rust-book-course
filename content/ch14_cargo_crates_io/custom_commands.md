@@ -25,7 +25,24 @@ which is also why your own subcommand names must *not* already start with it.
 cargo widget   ->  looks for an executable named `cargo-widget`
 ```
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Which executable name allows a custom tool to run as cargo hello?",
+  "options": [
+    "hello-cargo",
+    "rustc-hello",
+    "cargo-hello"
+  ],
+  "answer": 2,
+  "explain": "Cargo discovers executables named cargo-<name> on PATH and makes them available as cargo <name>."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Implement `subcommand_binary` in `chapters/ch14_cargo_crates_io/src/lib.rs` so
 it turns a subcommand name into the `cargo-<name>` binary Cargo would look for
 (and rejects bad input), then run:

@@ -22,7 +22,23 @@ This chapter's crate is a single **library**, so everything lives under
 `src/lib.rs` and other code reaches it through the crate name
 `ch07_packages_crates_modules`.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "How many library crates can a Cargo package contain?",
+  "options": [
+    "At most one",
+    "Exactly two",
+    "One for every source file"
+  ],
+  "answer": 0,
+  "explain": "A package can contain at most one library crate and multiple binary crates. A module is not automatically a separate crate."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 Open `src/lib.rs` and complete the `todo!()`s in this library crate, then run:
 

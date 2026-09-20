@@ -28,7 +28,24 @@ The practical takeaway: prefer the version that reads most clearly. Iterator
 chains express intent directly and resist the small bookkeeping mistakes that
 manual loops invite, with no speed penalty to pay for that clarity.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Are iterator chains necessarily slower than handwritten loops?",
+  "options": [
+    "No: iterators are guaranteed faster in all programs",
+    "No: optimization can make them comparable; measure the actual workload",
+    "Yes: every iterator allocates on the heap"
+  ],
+  "answer": 1,
+  "explain": "Rust’s abstractions are designed to optimize well, but performance depends on the workload and build profile. Benchmark instead of assuming either form wins."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 There is no new function for this section — it ties together the work you did in
 13.1–13.3. Make sure everything still passes:
 

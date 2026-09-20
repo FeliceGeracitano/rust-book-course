@@ -26,7 +26,24 @@ pub fn square(n: i64) -> i64 { n * n }
 Good comments explain *why*, not *what* — the code already shows what it does.
 Prefer clarifying tricky decisions over narrating obvious lines.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Which comment is used to document the item that follows it?",
+  "options": [
+    "// Explanation",
+    "/* Explanation */",
+    "/// Explanation"
+  ],
+  "answer": 2,
+  "explain": "/// is an outer documentation comment. Cargo can build documentation and test Rust examples embedded in these comments."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Read the `///` doc comments above each function in
 `chapters/ch03_common_concepts/src/lib.rs`: they describe exactly what to build.
 Implement them, then run:

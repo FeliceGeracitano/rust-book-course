@@ -26,7 +26,23 @@ Privacy still applies along the path: every segment you traverse must be `pub`
 (or an ancestor you already have access to). Use `super::` to refer to the
 parent module — handy when a child needs a sibling defined one level up.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What does crate:: refer to at the start of a path?",
+  "options": [
+    "The current function",
+    "The root of the current crate",
+    "The parent module"
+  ],
+  "answer": 1,
+  "explain": "crate:: starts an absolute path at this crate’s root. super:: refers to the parent module and self:: to the current module."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 Implement `eat_at_restaurant` in `src/lib.rs` so it reaches
 `add_to_waitlist` through both an absolute and a relative path, then run:

@@ -31,7 +31,24 @@ impl Greet for Dog {
 assert_eq!(Dog.hello(), "Hello, Rex!");
 ```
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What does impl Summary for Article provide?",
+  "options": [
+    "Article’s implementation of the Summary contract",
+    "Inheritance of every field from Summary",
+    "A global change to all types"
+  ],
+  "answer": 0,
+  "explain": "Traits describe shared behavior. An impl supplies that behavior for a particular type, which can then satisfy a Summary bound."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Define the `Summary` trait's default method and the `Tweet`/`Article` impls in
 `chapters/ch10_generics_traits_lifetimes/src/lib.rs`, then run:
 

@@ -29,7 +29,23 @@ Because `Output` is associated rather than generic, the compiler knows there is
 exactly one result type per `Add` impl, which keeps inference clean and error
 messages clear.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What does an associated type in a trait express?",
+  "options": [
+    "A value allocated by every method call",
+    "An automatically inherited struct field",
+    "A type chosen by an implementation and used by its trait contract"
+  ],
+  "answer": 2,
+  "explain": "For example, Iterator::Item names the type yielded by that iterator implementation, avoiding an extra type parameter at each use."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 In `chapters/ch20_advanced_features/src/lib.rs`, implement `Add` for `Point` so
 that `+` adds the `x` and `y` fields component-wise. Then run:

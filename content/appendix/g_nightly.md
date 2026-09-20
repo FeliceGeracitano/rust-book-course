@@ -28,3 +28,17 @@ For this course, plain **stable** Rust is all you need.
 ---
 
 📖 **Read it on the official Rust Book** — the full, authoritative version: <https://doc.rust-lang.org/book/appendix-07-nightly-rust.html>
+
+```quiz
+{
+  "id": "discovery",
+  "question": "When is the nightly toolchain useful?",
+  "options": [
+    "Only for formatting stable code",
+    "When experimenting with unstable compiler features",
+    "Whenever you want to run any Rust program at all"
+  ],
+  "answer": 1,
+  "explain": "Stable is suitable for normal use. Nightly enables experimentation with unstable features whose behavior and availability can change."
+}
+```

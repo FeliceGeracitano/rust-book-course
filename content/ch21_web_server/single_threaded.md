@@ -26,7 +26,23 @@ let response = format!(
 Note that `Content-Length` is the body's length **in bytes** (`body.len()`),
 not its character count — they differ for non-ASCII text.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Why can one slow request delay all other requests in a single-threaded server loop?",
+  "options": [
+    "A String can store only one HTTP request",
+    "The loop handles that request before accepting or processing more work",
+    "TCP guarantees one connection for the lifetime of a server"
+  ],
+  "answer": 1,
+  "explain": "When the loop processes requests sequentially, blocking work prevents it from moving on. This motivates separating acceptance from worker execution."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 Implement `parse_request_line` and `build_response` in
 `chapters/ch21_web_server/src/lib.rs`, then run:

@@ -29,7 +29,24 @@ parent struct's fields. Instead Rust reaches the same goals two ways: *traits*
 provide shared behavior (with default methods for reuse), and *trait objects*
 provide polymorphism. The next sections build on exactly those tools.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "How do private struct fields support encapsulation?",
+  "options": [
+    "They let methods preserve invariants when changing internal state",
+    "They make the fields impossible to change inside the module",
+    "They automatically create getters and setters"
+  ],
+  "answer": 0,
+  "explain": "Keeping fields private lets the defining module control valid state transitions through its public methods."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Open `chapters/ch18_oop/src/lib.rs` and complete the encapsulated `Button` and
 `SelectBox` `draw` methods (Exercise 1). Then run:
 

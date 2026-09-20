@@ -25,3 +25,17 @@ A quick reference to the operators you'll meet most.
 ---
 
 📖 **Read it on the official Rust Book** — the full, authoritative version: <https://doc.rust-lang.org/book/appendix-02-operators.html>
+
+```quiz
+{
+  "id": "discovery",
+  "question": "What is the difference between 1..4 and 1..=4?",
+  "options": [
+    "The first excludes 4; the second includes 4",
+    "Both include 4",
+    "Both exclude 1"
+  ],
+  "answer": 0,
+  "explain": "The .. range is exclusive at the upper end. ..= includes both endpoints, which matters in loops and range patterns."
+}
+```

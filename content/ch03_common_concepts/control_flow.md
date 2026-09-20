@@ -34,7 +34,25 @@ for i in 1..=5 {   // inclusive range 1,2,3,4,5
 Reach for `for` by default; use `while` when the stopping condition is dynamic,
 and `loop` when you need to break with a computed value.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What is printed?",
+  "options": [
+    "The loop never stops",
+    "6",
+    "3"
+  ],
+  "answer": 1,
+  "explain": "A loop can return a value through break. At n == 3, break n * 2 ends the loop and produces 6.",
+  "code": "fn main() {\n    let mut n = 0;\n    let result = loop {\n        n += 1;\n        if n == 3 { break n * 2; }\n    };\n    println!(\"{result}\");\n}"
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Complete `fib` (a `while` loop) and `classify` (an `if`/`else if` chain) in
 `chapters/ch03_common_concepts/src/lib.rs`, then run:
 

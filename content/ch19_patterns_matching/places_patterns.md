@@ -27,7 +27,24 @@ The same syntax binds names, ignores parts, and pulls fields out of structs,
 tuples, and enums no matter where it sits. Learning patterns once pays off across
 all of these positions.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Where can Rust patterns appear besides match arms?",
+  "options": [
+    "let bindings and function parameters",
+    "Only string literals",
+    "Only Cargo.toml"
+  ],
+  "answer": 0,
+  "explain": "Patterns also appear in if let, while let, for loops, and more. The context determines whether a refutable pattern is allowed."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Open `chapters/ch19_patterns_matching/src/lib.rs` and complete the `todo!()`
 bodies, then run:
 

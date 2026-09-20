@@ -29,7 +29,24 @@ let total: i32 = rx.iter().sum(); // 6, in any arrival order
 assert_eq!(total, 6);
 ```
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Can a String be used by the sender after a successful send(value)?",
+  "options": [
+    "No: ownership of the String was moved into send",
+    "Yes: channels always clone messages",
+    "Only if the receiving thread sleeps"
+  ],
+  "answer": 0,
+  "explain": "send takes ownership of its argument. The channel transfers that owned value; explicitly cloning beforehand would preserve a separate value for the sender."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Complete `channel_sum` in
 `chapters/ch16_concurrency/src/lib.rs`, then run:
 

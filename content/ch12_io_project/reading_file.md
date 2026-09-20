@@ -26,7 +26,24 @@ instead of touching the filesystem, so they stay fast and deterministic. In the
 exercises you'll work directly on that in-memory text, exactly the value
 `read_to_string` would have produced.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What is the result type of std::fs::read_to_string?",
+  "options": [
+    "Result<String, std::io::Error>",
+    "String with no possible error",
+    "Option<u8>"
+  ],
+  "answer": 0,
+  "explain": "Reading can fail because of permissions, a missing file, or invalid UTF-8. The Result makes those failures visible to the caller."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 In `chapters/ch12_io_project/src/lib.rs`, the search functions receive the file
 `contents` as a `&str`. Implement them, then run:
 

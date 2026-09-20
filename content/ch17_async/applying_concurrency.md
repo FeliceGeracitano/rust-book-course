@@ -23,7 +23,24 @@ executor drives *many* futures, interleaving their progress on a single thread.
 That is concurrency without extra threads: each `poll` is a cooperative chance
 for a task to advance a little and then yield control back.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Why can awaiting two independent futures one after the other lose concurrency?",
+  "options": [
+    "await always blocks every OS thread",
+    "The compiler forbids more than one future",
+    "The second future may not be polled until the first finishes"
+  ],
+  "answer": 2,
+  "explain": "Sequential awaits can serialize otherwise independent work. A join-like operation can poll multiple futures so their waiting periods overlap."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 In `chapters/ch17_async/src/lib.rs`, implement `block_on` so it polls the future
 in a loop and returns the value once it is `Ready`. Run:
 

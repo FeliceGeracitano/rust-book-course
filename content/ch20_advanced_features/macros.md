@@ -27,7 +27,23 @@ macros** (custom `derive`, attribute, and function-like macros) that operate on 
 token stream in their own crate — more powerful, but heavier to set up than the
 declarative macros you write here.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What is a key difference between a declarative macro and an ordinary function?",
+  "options": [
+    "A macro skips all type checking of generated Rust",
+    "A macro always runs in a separate process",
+    "A macro expands syntax before ordinary execution"
+  ],
+  "answer": 2,
+  "explain": "macro_rules! matches token patterns and expands them into Rust syntax. The resulting code is still subject to the compiler’s normal checks."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 In `chapters/ch20_advanced_features/src/lib.rs`, complete the `string_vec!`
 macro so it builds a `Vec<String>` by calling `.to_string()` on each input.

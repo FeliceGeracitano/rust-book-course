@@ -22,7 +22,23 @@ you return it behind a pointer — `-> impl Fn(i32) -> i32` when one concrete ty
 suffices, or `-> Box<dyn Fn(i32) -> i32>` when the returned type may vary at
 runtime. The `Box<dyn ...>` form gives a fixed size the compiler is happy with.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Can a closure that captures a local variable be used as a plain fn pointer?",
+  "options": [
+    "No: the captured environment needs a closure type",
+    "Yes: captures are stored inside every fn pointer",
+    "Only if the local variable has a short name"
+  ],
+  "answer": 0,
+  "explain": "A fn pointer identifies a function and carries no captured environment. A non-capturing closure can coerce to a fn pointer; capturing closures need an appropriate closure type or trait object."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 This subchapter has no separate code task — the function-pointer and
 closure-return ideas are reinforced by the other exercises. Keep working through

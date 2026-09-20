@@ -27,3 +27,17 @@ println!("{}", r#fn);
 ---
 
 📖 **Read it on the official Rust Book** — the full, authoritative version: <https://doc.rust-lang.org/book/appendix-01-keywords.html>
+
+```quiz
+{
+  "id": "discovery",
+  "question": "Why can a reserved Rust keyword not normally be used directly as a variable name?",
+  "options": [
+    "Only uppercase names are allowed",
+    "It has a grammatical role or is reserved for language use",
+    "All identifiers must contain a digit"
+  ],
+  "answer": 1,
+  "explain": "Keywords have special meaning or are reserved. Raw identifiers such as r#type allow many keyword spellings when interoperability requires them."
+}
+```

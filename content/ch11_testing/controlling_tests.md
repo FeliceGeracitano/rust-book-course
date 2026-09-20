@@ -36,7 +36,23 @@ fn slow_full_sweep() {
 }
 ```
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Which command runs tests one at a time?",
+  "options": [
+    "cargo test -- --test-threads=1",
+    "cargo test --release",
+    "cargo check"
+  ],
+  "answer": 0,
+  "explain": "Arguments after -- go to the test binary. --test-threads=1 disables parallel test execution; release changes the build profile."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 Finish the implementations in `chapters/ch11_testing/src/lib.rs`, then practice
 filtering — e.g. `cargo test -p ch11_testing guess` — before the full run:
