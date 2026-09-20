@@ -29,7 +29,24 @@ assert_eq!(result, 42);
 Spawn many handles, collect them in a `Vec`, then join them in order to gather
 deterministic results.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What does calling join on a JoinHandle do?",
+  "options": [
+    "Restart the thread",
+    "Wait for that thread to finish and report its result",
+    "Force both threads to run in a fixed alternating order"
+  ],
+  "answer": 1,
+  "explain": "join synchronizes with thread completion. Without suitable waiting, the process can exit before spawned work finishes."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Complete `parallel_squares` in
 `chapters/ch16_concurrency/src/lib.rs`, then run:
 

@@ -28,7 +28,24 @@ Running `cargo run` from the root requires `-p <name>` to choose which binary,
 since the workspace itself has no default. Workspaces shine when crates evolve
 together but you still want clean module boundaries and independent test suites.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What do workspace members normally share?",
+  "options": [
+    "All private items without imports",
+    "A Cargo.lock file and target directory at the workspace root",
+    "One mandatory source file"
+  ],
+  "answer": 1,
+  "explain": "A workspace coordinates related packages with a common lockfile and build output. Each member still has its own package and visibility rules."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Implement `compatible_update` in `chapters/ch14_cargo_crates_io/src/lib.rs` —
 the resolver logic that keeps shared dependencies on the newest compatible
 version — then run:

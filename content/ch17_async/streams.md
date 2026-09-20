@@ -30,7 +30,24 @@ Consuming a stream is the streaming analogue of `block_on`: poll in a loop, skip
 over `Pending`, collect each `Some`, and stop at `None` — exactly what a
 `while let Some(x) = stream.next().await` loop does.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "How does an async stream differ from a future returning a single value?",
+  "options": [
+    "It yields a sequence of values over time",
+    "It can never finish",
+    "It always stores every value in memory"
+  ],
+  "answer": 0,
+  "explain": "A stream supports repeatedly waiting for the next item and eventually signals the end of the sequence."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 In `chapters/ch17_async/src/lib.rs`, implement `CountStream::poll_next` (yield
 `start..end` with `Pending` stalls between items) and `collect_stream` (drain it
 into a `Vec`). Run:

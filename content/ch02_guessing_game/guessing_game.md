@@ -30,7 +30,24 @@ The real game wraps this in a loop that keeps asking until `Equal`. Your
 `play_round` does the same over a slice of pretend "typed" lines, skipping any
 that fail to parse — mirroring the Book's `continue` on bad input.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "A player enters letters instead of a number. What should the game do with parse::<u32>()?",
+  "options": [
+    "Handle Err and ask for another guess",
+    "Use the text directly as a u32",
+    "Assume parse always succeeds"
+  ],
+  "answer": 0,
+  "explain": "parse returns a Result. Handling Err lets the game recover from invalid user input rather than terminating with unwrap."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Complete `parse_guess`, `check_guess`, and `play_round` in
 `chapters/ch02_guessing_game/src/lib.rs`, then run:
 

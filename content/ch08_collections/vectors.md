@@ -28,7 +28,23 @@ input, compute something, and `push` the result onto a fresh `Vec`. Reserving
 capacity up front with `Vec::with_capacity` avoids repeated reallocations when
 you already know the length.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What happens when get(5) is called on a vector with two elements?",
+  "options": [
+    "It always panics",
+    "It returns None",
+    "It returns a zero-initialized element"
+  ],
+  "answer": 1,
+  "explain": "get returns Option<&T> and lets the caller handle an out-of-range index. Direct indexing with [5] would panic."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 Implement `running_totals` in `chapters/ch08_collections/src/lib.rs` so it
 returns a vector of prefix sums. Then run:

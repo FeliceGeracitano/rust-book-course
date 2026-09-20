@@ -27,7 +27,23 @@ tests can call them. `cleaning` has no `pub`, so it stays an internal detail.
 This is how you draw a clean boundary between a crate's public API and its
 private implementation.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "How can a parent module call a function in its child module?",
+  "options": [
+    "Every function is already public",
+    "Use mut on the function",
+    "Make that child function visible to the parent, for example with pub(super)"
+  ],
+  "answer": 2,
+  "explain": "Items are private by default. pub(super) exposes an item to its parent; broader visibility such as pub can also be used when appropriate."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 In `src/lib.rs`, make sure the nested `hosting` functions are reachable and
 return the right values, then run:

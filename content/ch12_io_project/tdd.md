@@ -24,7 +24,24 @@ red test turns green, you have a precise, regression-proof definition of
 "search." That confidence is exactly what lets you refactor the body later
 (say, swapping the loop for iterator adapters) without fear.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What comes first when adding a new search behavior with test-driven development?",
+  "options": [
+    "Optimizing allocations before defining behavior",
+    "A test that fails because the behavior is missing",
+    "Deleting existing tests"
+  ],
+  "answer": 1,
+  "explain": "Start with a failing test, implement enough to make it pass, then refactor while preserving the passing behavior."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Implement `search` in `chapters/ch12_io_project/src/lib.rs` to make the
 case-sensitive search tests pass, then run:
 

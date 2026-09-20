@@ -36,7 +36,23 @@ Note that `..user` *moves* non-`Copy` fields, so `user` may no longer be usable
 afterward. Rust also offers *tuple structs* like `struct Point(i32, i32);` when
 field names would add no clarity.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What must a struct literal provide when it does not use update syntax?",
+  "options": [
+    "A value for every field",
+    "Only the public fields",
+    "Only fields that differ from zero"
+  ],
+  "answer": 0,
+  "explain": "Struct literals must initialize every field. Rust does not silently zero-fill fields that you leave out."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 In `chapters/ch05_structs/src/lib.rs`, implement `build_rectangle` with field
 init shorthand and `with_email` with struct update syntax, then run:

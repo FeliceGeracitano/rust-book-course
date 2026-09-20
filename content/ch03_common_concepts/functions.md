@@ -26,7 +26,25 @@ You can also return early with the `return` keyword, but the trailing-expression
 style is idiomatic for the final value. Functions can be defined in any order;
 the compiler sees them all.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Why does this function fail to compile?",
+  "options": [
+    "The semicolon makes the body return ()",
+    "Returning i32 requires mut",
+    "Functions cannot multiply"
+  ],
+  "answer": 0,
+  "explain": "A trailing expression supplies the return value. Removing the semicolon makes x * 2 the expression returned from double.",
+  "code": "fn double(x: i32) -> i32 {\n    x * 2;\n}"
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 The functions in `chapters/ch03_common_concepts/src/lib.rs` all rely on returning
 a final expression. Complete them, paying attention to the missing semicolons,
 then run:

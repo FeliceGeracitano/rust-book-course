@@ -31,7 +31,70 @@ fn main() {
 Passing an owned value to a function moves it in; returning a value moves it back
 out — exactly what the `combine` exercise practices.
 
-### Exercise
+```trace
+{
+  "title": "One allocation, a new owner",
+  "code": "fn main() {\n    let first = String::from(\"hello\");\n    let second = first;\n    println!(\"{second}\");\n}",
+  "steps": [
+    {
+      "line": 2,
+      "note": "String::from allocates the text. first owns the allocation.",
+      "state": {
+        "first": "owns \"hello\"",
+        "second": "not bound yet"
+      },
+      "output": ""
+    },
+    {
+      "line": 3,
+      "note": "The assignment moves ownership. It does not duplicate the allocation.",
+      "state": {
+        "first": "moved; cannot be read",
+        "second": "owns \"hello\""
+      },
+      "output": ""
+    },
+    {
+      "line": 4,
+      "note": "println! borrows second to format it, so second keeps ownership.",
+      "state": {
+        "first": "moved",
+        "second": "still owns \"hello\""
+      },
+      "output": "hello\n"
+    },
+    {
+      "line": 5,
+      "note": "At the end of the scope, second is dropped and the allocation is freed once.",
+      "state": {
+        "first": "moved",
+        "second": "dropped"
+      },
+      "output": "hello\n"
+    }
+  ]
+}
+```
+
+```quiz
+{
+  "id": "discovery",
+  "question": "Which binding can still be used after this move?",
+  "options": [
+    "second only",
+    "Both first and second",
+    "first only"
+  ],
+  "answer": 0,
+  "explain": "String does not implement Copy. Assigning it to second transfers ownership; first is no longer usable. clone() would explicitly create another owned String.",
+  "code": "fn main() {\n    let first = String::from(\"hello\");\n    let second = first;\n}"
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Implement `combine` in `chapters/ch04_ownership/src/lib.rs`, then run:
 
 ```bash

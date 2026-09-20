@@ -24,7 +24,23 @@ Note that `char::to_uppercase` returns an *iterator*, because uppercasing one
 character can produce several (think of the German `ß`). Pushing each resulting
 `char` keeps your code correct for any input.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Why can you not index a String with text[0]?",
+  "options": [
+    "A byte index does not necessarily identify a complete Unicode character",
+    "Strings cannot be read after creation",
+    "Every character occupies exactly four bytes"
+  ],
+  "answer": 0,
+  "explain": "String stores UTF-8. Byte offsets, Unicode scalar values, and user-perceived characters are different; choose bytes(), chars(), or a valid string slice deliberately."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 Implement `capitalize_words` in `chapters/ch08_collections/src/lib.rs` so it
 upper-cases the first character of every word while leaving the rest untouched.

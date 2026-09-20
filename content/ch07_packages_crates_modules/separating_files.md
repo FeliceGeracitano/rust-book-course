@@ -29,7 +29,23 @@ is purely about organization — the module tree stays identical.
 In this chapter the crate is small enough to live in one `src/lib.rs`, but the
 same module tree would split cleanly along these lines.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What does mod garden; in src/lib.rs ask the compiler to do?",
+  "options": [
+    "Import an external package named garden",
+    "Create a second library crate",
+    "Load the garden module, commonly from src/garden.rs"
+  ],
+  "answer": 2,
+  "explain": "mod declares a module. Its source may live in garden.rs or garden/mod.rs; file organization does not change the module’s privacy rules."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 Complete the remaining `todo!()`s in `src/lib.rs` so the whole module tree
 works, then run:

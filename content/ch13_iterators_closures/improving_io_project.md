@@ -28,7 +28,24 @@ Note the borrow: the returned `&str` slices point into `contents`, so the
 lifetime `'a` ties the output to the input. We test the *pure* function here —
 no files, args, or terminal — exactly the part worth unit-testing.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Why can text.lines().filter(...) replace a manual search loop?",
+  "options": [
+    "It automatically spawns one thread per line",
+    "It always allocates a String for each line",
+    "It describes a sequence of borrowed lines and retains only matching ones"
+  ],
+  "answer": 2,
+  "explain": "lines yields borrowed string slices. filter selects items without requiring an intermediate vector; a later collect can gather the matches."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Implement `search_insensitive` in
 `chapters/ch13_iterators_closures/src/lib.rs`, then run:
 

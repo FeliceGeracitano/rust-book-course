@@ -26,3 +26,17 @@ behavior, implement the trait by hand instead.
 ---
 
 📖 **Read it on the official Rust Book** — the full, authoritative version: <https://doc.rust-lang.org/book/appendix-03-derivable-traits.html>
+
+```quiz
+{
+  "id": "discovery",
+  "question": "What does #[derive(Debug)] make possible for a struct with Debug fields?",
+  "options": [
+    "Automatically treating it as Copy",
+    "Converting it into valid JSON",
+    "Formatting it with {:?}"
+  ],
+  "answer": 2,
+  "explain": "Deriving Debug generates a useful developer-facing representation. Other behavior needs its own trait implementations or derives."
+}
+```

@@ -29,7 +29,24 @@ for h in handles { h.join().unwrap(); }
 assert_eq!(*counter.lock().unwrap(), 10);
 ```
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What combination commonly shares a mutable value across threads?",
+  "options": [
+    "Rc<RefCell<T>> in every case",
+    "A plain shared &T that permits arbitrary writes",
+    "Arc<Mutex<T>>"
+  ],
+  "answer": 2,
+  "explain": "Arc supplies thread-safe shared ownership and Mutex protects access. The contained type must meet the relevant Send and Sync requirements."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Complete `SharedCounter` and `concurrent_increments` in
 `chapters/ch16_concurrency/src/lib.rs`, then run:
 

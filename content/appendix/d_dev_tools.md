@@ -7,8 +7,7 @@ The tooling that makes day-to-day Rust pleasant:
 - **rustfmt** — automatic formatting. `cargo fmt` rewrites your code to the
   community style.
 - **Clippy** — a linter with hundreds of checks for common mistakes and
-  non-idiomatic code. `cargo clippy`. (The **Clippy** button in this course runs
-  it for you.)
+  non-idiomatic code. `cargo clippy` in a local Cargo project.
 - **rust-analyzer** — the language server powering IDE features: completion,
   go-to-definition, inline errors, and types.
 - **`cargo fix`** — applies compiler-suggested fixes automatically (great for
@@ -26,3 +25,17 @@ cargo fix        # apply suggestions
 ---
 
 📖 **Read it on the official Rust Book** — the full, authoritative version: <https://doc.rust-lang.org/book/appendix-04-useful-development-tools.html>
+
+```quiz
+{
+  "id": "discovery",
+  "question": "Which tool suggests common Rust code improvements?",
+  "options": [
+    "The linker",
+    "Clippy",
+    "rustfmt alone"
+  ],
+  "answer": 1,
+  "explain": "Clippy provides lints for suspicious or non-idiomatic code. rustfmt primarily standardizes formatting; both complement compiler checks."
+}
+```

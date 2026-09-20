@@ -26,7 +26,25 @@ Here the closure captures nothing, but it could just as easily read a field of
 `self` to compute the fallback. That is exactly the pattern the shirt-store
 `Inventory::giveaway` uses.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Why can this closure read offset without an explicit parameter?",
+  "options": [
+    "offset becomes a global variable",
+    "Closures can capture values from their surrounding scope",
+    "All Rust functions automatically read local variables"
+  ],
+  "answer": 1,
+  "explain": "Unlike an ordinary named function, a closure can capture its environment. Here it only needs shared access to offset.",
+  "code": "fn main() {\n    let offset = 2;\n    let add = |n| n + offset;\n    println!(\"{}\", add(3));\n}"
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Implement `Inventory::giveaway` and `Inventory::most_stocked` in
 `chapters/ch13_iterators_closures/src/lib.rs`, then run:
 

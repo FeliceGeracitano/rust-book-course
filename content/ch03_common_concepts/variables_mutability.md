@@ -25,7 +25,25 @@ let spaces = spaces.len(); // now usize — a new variable
 Shadowing lets you transform a value through a small pipeline while keeping one
 descriptive name, without making it `mut`.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What is printed by this program?",
+  "options": [
+    "5",
+    "It does not compile",
+    "6"
+  ],
+  "answer": 2,
+  "explain": "The second let shadows the first binding. Shadowing creates a new binding; it does not require the old binding to be mutable.",
+  "code": "fn main() {\n    let x = 5;\n    let x = x + 1;\n    println!(\"{x}\");\n}"
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Complete `parse_and_square` in
 `chapters/ch03_common_concepts/src/lib.rs` using shadowing, then run:
 

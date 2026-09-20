@@ -1,6 +1,6 @@
 import { ComponentType, lazy } from 'react'
 
-// Maps a chapter crate id (from course.json) to its interactive widget.
+// Maps a chapter id (from course.json) to its interactive widget.
 // Each widget is lazy-loaded (its own chunk) so it only downloads when you open
 // that chapter — keeping the initial bundle small. LessonView renders it inside
 // a <Suspense>.
@@ -12,7 +12,6 @@ const REGISTRY: Record<string, ComponentType> = {
   ch17_async: lazy(() => import('./AsyncViz')),
 }
 
-export function vizFor(crate: string | null): ComponentType | null {
-  if (!crate) return null
-  return REGISTRY[crate] ?? null
+export function vizFor(chapterId: string): ComponentType | null {
+  return REGISTRY[chapterId] ?? null
 }

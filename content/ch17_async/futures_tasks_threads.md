@@ -25,7 +25,24 @@ let handle = std::thread::spawn(|| heavy_computation());
 Rule of thumb: reach for threads when work is CPU-bound and parallel; reach for
 async tasks when work is I/O-bound and you have *many* of them waiting.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Where should long CPU-heavy blocking work usually go in an async application?",
+  "options": [
+    "Into a String to make it asynchronous",
+    "A suitable blocking or CPU worker pool",
+    "Inside an async task with no yielding forever"
+  ],
+  "answer": 1,
+  "explain": "Long blocking work can prevent the executor from polling other tasks. Move it to an appropriate worker pool and coordinate the result."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 No new code for this section. Make sure your whole chapter is green:
 
 ```bash

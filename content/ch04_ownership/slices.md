@@ -29,7 +29,24 @@ fn main() {
 Watch range bounds: indexing past the end panics, so clamp lengths when the range
 might overrun.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What does &text[..5] give you for text = String::from(\"hello rust\")?",
+  "options": [
+    "Ownership of text",
+    "A borrowed view of the first five bytes",
+    "A newly allocated String"
+  ],
+  "answer": 1,
+  "explain": "A &str slice borrows a valid UTF-8 range of the existing string. It does not copy or take ownership of the allocation."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Implement `first_word` and `window` in
 `chapters/ch04_ownership/src/lib.rs`, then run:
 

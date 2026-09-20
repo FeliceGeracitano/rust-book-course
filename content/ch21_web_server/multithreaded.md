@@ -30,7 +30,23 @@ assert_eq!(*count.lock().unwrap(), 4);
 Joining every handle before reading the count makes the result deterministic —
 no sleeps or guesswork required.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Why use a bounded worker pool instead of spawning unlimited threads per request?",
+  "options": [
+    "To limit concurrent resource usage",
+    "To guarantee every request is instantaneous",
+    "To remove the need for synchronization"
+  ],
+  "answer": 0,
+  "explain": "A fixed worker count bounds active execution resources. Queue capacity and overload behavior still need a deliberate design."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 Implement the `JobCounter` methods in
 `chapters/ch21_web_server/src/lib.rs`, then run:

@@ -23,7 +23,23 @@ fn split_first(slice: &mut [i32]) -> (&mut i32, &mut [i32]) {
 Always write a `// SAFETY:` comment explaining why the invariants hold — that is
 how reviewers trust your `unsafe`.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Does an unsafe block turn off the borrow checker for all ordinary references?",
+  "options": [
+    "No: it permits specific unsafe operations while other checks still apply",
+    "Yes: all type and lifetime checks are disabled",
+    "Yes: it makes every raw pointer valid"
+  ],
+  "answer": 0,
+  "explain": "unsafe marks operations whose safety obligations the programmer must uphold. It does not validate pointers for you or disable ordinary reference rules."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 In `chapters/ch20_advanced_features/src/lib.rs`, complete `split_at_mut` so it
 returns two disjoint mutable halves using raw pointers inside a safe wrapper.

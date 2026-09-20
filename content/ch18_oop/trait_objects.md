@@ -29,7 +29,24 @@ buttons, text boxes, or any future type that implements `Draw` — without the
 `Screen` knowing those types exist. Trait objects must be *dyn compatible*
 (roughly: no generic methods, no `Self` return), which `Draw` satisfies.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Why use Vec<Box<dyn Draw>> for different drawable types?",
+  "options": [
+    "It removes the need to implement Draw",
+    "It makes every call statically dispatched",
+    "It can hold different concrete types behind one trait-object interface"
+  ],
+  "answer": 2,
+  "explain": "Trait objects provide dynamic dispatch through a shared trait interface. Each element can own a different concrete type implementing Draw."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 In `chapters/ch18_oop/src/lib.rs`, finish `Screen::render`, the `Shape`
 implementations, and `total_area` (Exercises 1–2). Then run:
 

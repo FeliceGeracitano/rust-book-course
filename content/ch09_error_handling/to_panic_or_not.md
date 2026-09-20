@@ -28,7 +28,23 @@ invariant means the program is in a state it should never reach. `unwrap` and
 document why. The aim is code that fails loudly on real bugs but stays recoverable
 on ordinary, expected errors.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "A configuration file supplied by a user is missing. What is usually the best API behavior?",
+  "options": [
+    "Always panic immediately",
+    "Silently replace every setting with zero",
+    "Return a Result so the caller can decide how to recover"
+  ],
+  "answer": 2,
+  "explain": "Missing external input is an anticipated failure. A Result lets callers report it, choose a fallback, or ask for a different file."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 Finish the `Result`-returning functions in
 `chapters/ch09_error_handling/src/lib.rs` — none of the tested paths should ever

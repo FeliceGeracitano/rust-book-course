@@ -31,7 +31,24 @@ let first = weekdays[0];     // indexing
 Tuples are great for returning a `(min, max)` pair; arrays are great when the
 count is fixed and known up front.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What type describes a tuple containing an integer and a boolean?",
+  "options": [
+    "Vec<bool>",
+    "(i32, bool)",
+    "[i32; 2]"
+  ],
+  "answer": 1,
+  "explain": "A tuple groups values that can have different types. Arrays and vectors hold elements of one type."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Complete `fahrenheit_to_celsius` and `min_and_max` in
 `chapters/ch03_common_concepts/src/lib.rs`, then run:
 

@@ -25,7 +25,24 @@ the last one created is the first cleaned up. Second, you may **not** call
 early, hand it to `std::mem::drop` (`drop(value)`), which takes ownership and
 lets the destructor run immediately.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "When does Rust normally run Drop for a local owned value?",
+  "options": [
+    "Only when the user calls its drop method directly",
+    "At a fixed timer interval",
+    "When that value goes out of scope"
+  ],
+  "answer": 2,
+  "explain": "Rust arranges cleanup as ownership ends. std::mem::drop can consume a value to drop it early; calling the Drop::drop method directly is not allowed."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 In `chapters/ch15_smart_pointers/src/lib.rs`, implement `Tracker::new`, its
 `Drop` impl (push the label to the log), and `drop_now`. The tests assert the
 reverse-order cleanup sequence. Then run:

@@ -23,3 +23,17 @@ Key points:
 ---
 
 📖 **Read it on the official Rust Book** — the full, authoritative version: <https://doc.rust-lang.org/book/appendix-05-editions.html>
+
+```quiz
+{
+  "id": "discovery",
+  "question": "Do crates using different Rust editions have to be in separate programs?",
+  "options": [
+    "No: editions can interoperate in one dependency graph",
+    "Yes: every dependency must use the exact same edition",
+    "Yes: editions use unrelated machine code formats"
+  ],
+  "answer": 0,
+  "explain": "Editions allow language evolution with opt-in source changes. Compatible crates using different editions can be combined in the same program."
+}
+```

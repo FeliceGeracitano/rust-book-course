@@ -26,7 +26,24 @@ which is exactly the signature you implemented. The `async`/`await` keywords are
 sugar — the compiler generates a `Future` whose `poll` resumes the function at
 the last `.await` point, just like our hand-written state machines.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What should a Future do when it cannot finish on the current poll?",
+  "options": [
+    "Block the executor thread until the operation completes",
+    "Return Ready with an invented value",
+    "Arrange to wake the task when progress is possible, then return Pending"
+  ],
+  "answer": 2,
+  "explain": "Pending means incomplete for now. The waker notifies the executor when polling again may make progress, avoiding a blocking wait inside poll."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 There is no new code here. Re-read your `SimpleFuture` and `SimpleStream` impls
 in `chapters/ch17_async/src/lib.rs` and note how each maps onto `Future` and
 `Stream`. Then confirm everything still passes:

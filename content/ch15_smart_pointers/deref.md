@@ -27,7 +27,24 @@ expecting `&Target`, the compiler inserts `deref` calls for you. That is why a
 chains `MyBox<String>` -> `String` -> `str`. This keeps APIs flexible without
 manual conversions.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Why can &MyBox<String> be passed where &str is expected when MyBox implements Deref<Target = String>?",
+  "options": [
+    "Deref coercion can follow MyBox to String and then str",
+    "Every struct is automatically a string",
+    "The conversion consumes MyBox"
+  ],
+  "answer": 0,
+  "explain": "Deref coercion adjusts references through Deref implementations. It borrows the underlying value instead of transferring ownership."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 In `chapters/ch15_smart_pointers/src/lib.rs`, finish `MyBox::new`, the `deref`
 method, and the `hello` function so deref coercion lets a `&MyBox<String>` be
 greeted as a `&str`. Then run:

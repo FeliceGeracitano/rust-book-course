@@ -33,7 +33,23 @@ This grouping is the first step. The dimensions and the operation on them
 clearly belong together, which naturally leads to attaching the behavior to the
 type itself (next section).
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Why pass &Rectangle to an area function?",
+  "options": [
+    "To guarantee a heap allocation",
+    "To make all its fields mutable",
+    "To inspect the rectangle without taking ownership"
+  ],
+  "answer": 2,
+  "explain": "A shared reference lets area read the rectangle while the caller keeps ownership and can use it again afterward."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 In `chapters/ch05_structs/src/lib.rs`, implement the free function `area`, which
 takes `&Rectangle` and returns `width * height`. Then run:

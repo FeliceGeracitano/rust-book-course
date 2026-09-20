@@ -26,7 +26,23 @@ assert_eq!(counts.get("z"), None);
 Owned `String` keys work the same way; just call `.to_string()` on each `&str`
 before inserting so the map owns its keys independently of the input.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What does entry(key).or_insert(0) return?",
+  "options": [
+    "Always a copy of zero",
+    "A boolean showing whether key exists",
+    "A mutable reference to the existing or newly inserted value"
+  ],
+  "answer": 2,
+  "explain": "The entry API combines lookup and possible insertion. The returned &mut V lets you update the value, such as incrementing a word count."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
 
 Implement `word_count` in `chapters/ch08_collections/src/lib.rs` using the entry
 API so it counts how often each word appears. Then run:

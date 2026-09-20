@@ -92,3 +92,22 @@ body {
   border: 1px solid var(--color-edge);
   padding: 0.4rem 0.7rem;
 }
+
+.eyebrow { color: var(--color-muted); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.discovery { margin: 2rem 0; padding: 1.25rem; border: 1px solid var(--color-edge); border-radius: 1rem; background: var(--color-ink-soft); }
+.prose-rust .discovery h2 { margin-top: 0.4rem; margin-bottom: 1rem; color: var(--color-paper); font-size: 1.1rem; }
+.primary, .secondary { border-radius: 0.5rem; padding: 0.6rem 0.85rem; font-size: 0.85rem; }
+.primary { background: var(--color-rust); color: white; }
+.secondary { border: 1px solid var(--color-edge); background: var(--color-ink-card); }
+.text-link { color: var(--color-crab); text-decoration: underline; text-underline-offset: 3px; }
+.answer { width: 100%; text-align: left; border: 1px solid var(--color-edge); border-radius: 0.6rem; padding: 0.8rem; background: var(--color-ink); font-size: 0.9rem; }
+.answer:not(:disabled):hover { border-color: var(--color-crab); }
+.answer.correct { border-color: var(--color-ok); background: #7bb66115; }
+.answer.incorrect { border-color: var(--color-rust-bright); }
+button:disabled { cursor: default; }
+.secondary:disabled { opacity: 0.4; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--color-crab); outline-offset: 4px; }
+.skip-link { position: fixed; top: -100px; left: 1rem; z-index: 100; background: var(--color-ink-card); padding: 1rem; }
+.skip-link:focus { top: 1rem; }
+.prose-rust details { margin: 1.5rem 0; padding: 1rem; border: 1px solid var(--color-edge); border-radius: 0.75rem; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }

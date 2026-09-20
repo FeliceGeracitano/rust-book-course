@@ -23,7 +23,24 @@ assert_send(42u64);                 // ok: integers are Send
 // assert_send(std::rc::Rc::new(1)); // compile error: Rc is not Send
 ```
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "What does T: Send mean?",
+  "options": [
+    "T automatically starts a background task",
+    "Ownership of T can safely move between threads",
+    "A shared &T always allows mutation"
+  ],
+  "answer": 1,
+  "explain": "Send concerns moving ownership across threads. Sync means shared references to the type can safely be sent between threads."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Complete `assert_send` and `assert_sync` in
 `chapters/ch16_concurrency/src/lib.rs`, then run:
 

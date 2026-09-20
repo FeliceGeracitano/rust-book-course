@@ -22,7 +22,24 @@ value was already dropped. The common pattern is parent-child trees: children
 hold a *strong* `Rc` to nothing upward, and a *weak* link back to the parent,
 breaking the cycle.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Why use Weak for a parent link in an Rc-owned tree?",
+  "options": [
+    "It guarantees that the parent exists forever",
+    "It allows mutation without borrowing rules",
+    "It avoids making the parent link a strong owner that can keep a cycle alive"
+  ],
+  "answer": 2,
+  "explain": "Weak does not add to the strong count. upgrade returns Option<Rc<T>> because the allocation’s value may already have been dropped."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 You have already used `Rc::strong_count` in the `Counter` exercise. Review it
 and confirm that dropping every handle returns the count to its starting point —
 that is exactly how a leak would show up as a count that never falls. Run:

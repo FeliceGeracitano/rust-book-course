@@ -30,7 +30,25 @@ the rest. Struct-like variants destructure with braces: `Command::Move { dx, dy 
 `match` is an expression, so every arm must produce the same type, and that value
 becomes the result.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Why is this match rejected?",
+  "options": [
+    "Some cannot hold an integer",
+    "match always needs an underscore arm",
+    "It does not handle None"
+  ],
+  "answer": 2,
+  "explain": "A match must cover every possible variant. Add a None arm (or a suitable catch-all); an underscore is not required when explicit arms are exhaustive.",
+  "code": "fn main() {\n    let n = Some(3);\n    match n {\n        Some(value) => println!(\"{value}\"),\n    }\n}"
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Complete `value_in_cents`, `plus_one`, and `apply_command` in
 `chapters/ch06_enums_pattern_matching/src/lib.rs`, then run:
 

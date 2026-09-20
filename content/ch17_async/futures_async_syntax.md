@@ -32,7 +32,24 @@ impl SimpleFuture for Countdown {
 
 Nothing runs until something polls the future — futures are *lazy*.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Does calling an async function by itself run its body to completion?",
+  "options": [
+    "No: it returns a future that must be polled",
+    "Yes: async functions always start an operating-system thread",
+    "Yes: futures are eagerly evaluated"
+  ],
+  "answer": 0,
+  "explain": "Calling an async function constructs a future. An executor polls it, typically after you await or spawn it with a runtime."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 In `chapters/ch17_async/src/lib.rs`, implement `Countdown::new` and its `poll`
 so it returns `Pending` until the counter hits zero, then `Ready(label)`. Run:
 

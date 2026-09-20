@@ -26,7 +26,24 @@ fn poll(&mut self) -> Poll<(A::Output, B::Output)> {
 `race` is the mirror image: return the first sub-future that is `Ready`. Polling
 order makes ties deterministic — poll `a` before `b`, and `a` wins a tie.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "How does joining futures differ from racing them?",
+  "options": [
+    "They always have identical completion behavior",
+    "Join waits for all selected results; a race resolves on a selected completion",
+    "Join always starts OS threads; race never polls futures"
+  ],
+  "answer": 1,
+  "explain": "Joining combines results after completion of the participating futures. Racing selects a completion; handling the losing futures depends on the API and ownership."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 In `chapters/ch17_async/src/lib.rs`, implement `Join` (wait for both) and `Race`
 (first to finish wins, tagged `Left`/`Right`). Run:
 

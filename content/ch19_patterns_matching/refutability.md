@@ -30,7 +30,24 @@ Mixing them up is a compile error: an irrefutable pattern in `if let` is useless
 and a refutable one in plain `let` cannot guarantee a binding. The compiler even
 suggests the right form.
 
-### Exercise
+```quiz
+{
+  "id": "discovery",
+  "question": "Why is let Some(x) = maybe; rejected for an Option<i32>?",
+  "options": [
+    "Some cannot contain i32",
+    "let cannot bind integers",
+    "The pattern does not match None"
+  ],
+  "answer": 2,
+  "explain": "A plain let binding requires an irrefutable pattern. Use if let, match, or let...else to handle the case where the pattern does not match."
+}
+```
+
+### Optional terminal practice
+
+Run `node scripts/prepare-exercises.mjs` once from the repository root, then `cd chapters` before running the commands below. Source paths are relative to the repository root. You can complete the browser lesson without installing Rust.
+
 Complete the `todo!()` bodies in
 `chapters/ch19_patterns_matching/src/lib.rs`, then run:
 
