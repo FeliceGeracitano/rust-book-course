@@ -595,6 +595,54 @@
           ]
         }
       ]
+    },
+    {
+      "id": "patterns",
+      "title": "Patterns & use cases",
+      "chapters": [
+        {
+          "id": "patterns_large_service",
+          "title": "Structuring a large Rust codebase",
+          "subchapters": [
+            {
+              "id": "boundaries",
+              "title": "Structuring a large Rust codebase",
+              "problem": "Choose crate boundaries for a service with several domains so anyone can find a domain.",
+              "ref": "https://matklad.github.io/2021/08/22/large-rust-workspaces.html"
+            },
+            {
+              "id": "endpoints",
+              "title": "Multiple endpoints with one application",
+              "problem": "Organize routers, handlers, validation, and error responses per domain and merge them once.",
+              "ref": "https://docs.rs/axum/latest/axum/struct.Router.html#method.merge"
+            },
+            {
+              "id": "shared_clients",
+              "title": "Shared external clients",
+              "problem": "Construct one reqwest::Client, inject it explicitly, and own its lifetime.",
+              "ref": "https://docs.rs/reqwest/latest/reqwest/struct.Client.html"
+            },
+            {
+              "id": "cross_domain",
+              "title": "Cross-domain workflows",
+              "problem": "Coordinate domains through consumer-owned traits without dependency cycles.",
+              "ref": "https://github.com/tikv/tikv/blob/master/components/engine_traits/src/lib.rs"
+            },
+            {
+              "id": "shared_libraries",
+              "title": "Shared libraries with clear owners",
+              "problem": "Share an invariant and a mechanism without coupling domains.",
+              "ref": "https://github.com/rust-lang/rust-analyzer/blob/master/docs/book/src/contributing/architecture.md"
+            },
+            {
+              "id": "modules_vs_crates",
+              "title": "Modules vs crates, and testing at boundaries",
+              "problem": "Decide when a module boundary is enough, when to split a crate, and how to test each boundary with fakes.",
+              "ref": "https://matklad.github.io/2021/09/04/fast-rust-builds.html"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

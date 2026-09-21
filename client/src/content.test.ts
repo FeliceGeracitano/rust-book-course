@@ -25,14 +25,20 @@ function blocks(markdown: string) {
 }
 
 describe('published curriculum', () => {
-  it('groups the 87 Book lessons under one Lessons part with unchanged ids', () => {
-    expect(course.parts.map((part) => part.id)).toEqual(['lessons'])
-    expect(course.parts[0].title).toBe('Lessons')
-    expect(chapters).toHaveLength(22)
-    expect(lessons).toHaveLength(87)
-    expect(lessons.every((l) => l.part.id === 'lessons')).toBe(true)
+  it('keeps the 87 Book lessons first with unchanged ids, then the pattern chapters', () => {
+    expect(course.parts.map((part) => part.id)).toEqual(['lessons', 'patterns'])
+    expect(course.parts.map((part) => part.title)).toEqual([
+      'Lessons',
+      'Patterns & use cases',
+    ])
+    expect(chapters).toHaveLength(23)
+    expect(lessons).toHaveLength(93)
+    expect(lessons.slice(0, 87).every((l) => l.part.id === 'lessons')).toBe(true)
+    expect(lessons.slice(87).every((l) => l.part.id === 'patterns')).toBe(true)
     expect(lessons[0].id).toBe('ch01_getting_started/installation')
     expect(lessons[86].id).toBe('appendix/g_nightly')
+    expect(lessons[87].id).toBe('patterns_large_service/boundaries')
+    expect(lessons[87].sub.problem).toMatch(/crate boundaries/)
     expect(new Set(chapters.map((ch) => ch.id)).size).toBe(chapters.length)
     expect(new Set(lessons.map((l) => l.id)).size).toBe(lessons.length)
     const paths = Object.keys(markdownFiles)

@@ -30,7 +30,7 @@ it('loads without an API, navigates, saves progress and offers to continue after
     await user.click(
       screen.getByRole('button', { name: 'Mark lesson complete' }),
     )
-    expect(screen.getByText(/1 \/ 87/)).toBeInTheDocument()
+    expect(screen.getByText(/1 \/ 93/)).toBeInTheDocument()
     const navigation = screen.getByRole('navigation', {
       name: 'Lesson navigation',
     })
@@ -66,7 +66,7 @@ it('lists every chapter with its progress on the landing page', async () => {
     'href',
     '#appendix/a_keywords',
   )
-  expect(screen.getByText('1 / 87 lessons done')).toBeInTheDocument()
+  expect(screen.getByText('1 / 93 lessons done')).toBeInTheDocument()
   expect(
     screen.queryByRole('link', { name: /Start from the beginning/ }),
   ).not.toBeInTheDocument()
@@ -119,7 +119,7 @@ it('allows completion to be undone and exposes the mobile chapter menu state', a
   await userEvent.click(
     screen.getByRole('button', { name: /Completed · mark incomplete/ }),
   )
-  expect(screen.getByText(/0 \/ 87/)).toBeInTheDocument()
+  expect(screen.getByText(/0 \/ 93/)).toBeInTheDocument()
 })
 it('preserves the active trace step when quiz and completion progress change', async () => {
   window.history.replaceState(null, '', '/#ch04_ownership/what_is_ownership')
