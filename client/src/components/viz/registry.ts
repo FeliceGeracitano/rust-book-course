@@ -10,6 +10,7 @@ const REGISTRY: Record<string, ComponentType> = {
   ch15_smart_pointers: lazy(() => import('./SmartPointersViz')),
   ch16_concurrency: lazy(() => import('./ConcurrencyViz')),
   ch17_async: lazy(() => import('./AsyncViz')),
+  patterns_large_service: lazy(() => import('./LargeServiceViz')),
 }
 
 export function vizFor(chapterId: string): ComponentType | null {
