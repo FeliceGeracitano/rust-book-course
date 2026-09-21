@@ -1,0 +1,40 @@
+[workspace]
+resolver = "2"
+members = ["crates/*"]
+default-members = ["crates/api"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[workspace.dependencies]
+money = { path = "crates/money" }
+customers = { path = "crates/customers" }
+billing = { path = "crates/billing" }
+orders = { path = "crates/orders" }
+integrations = { path = "crates/integrations" }
+transport-http = { path = "crates/transport-http" }
+observability = { path = "crates/observability" }
+app = { path = "crates/app" }
+demo-upstream = { path = "crates/demo-upstream" }
+anyhow = "1"
+async-trait = "0.1"
+axum = "0.8"
+http-body-util = "0.1"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "signal", "net", "time", "sync"] }
+tower = { version = "0.5", features = ["util"] }
+tower-http = { version = "0.6", features = ["trace"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+url = "2"
+wiremock = "0.6"
+
+[workspace.lints.clippy]
+dbg_macro = "deny"
+todo = "deny"

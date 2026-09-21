@@ -1,8 +1,8 @@
 import { beforeEach, expect, it } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import ChapterTree from './ChapterTree'
-import { course } from '../content'
+import { chapters, type Part } from '../content'
 import { markComplete, reloadProgress } from '../progress'
 
 beforeEach(() => {
@@ -33,7 +33,7 @@ it('shows a progress ring per chapter', () => {
   render(<ChapterTree selectedId="ch01_getting_started/installation" />)
   expect(screen.getByLabelText('1 of 3 done')).toBeInTheDocument()
   expect(screen.getAllByLabelText(/^\d+ of \d+ done$/)).toHaveLength(
-    course.chapters.length,
+    chapters.length,
   )
 })
 
@@ -41,7 +41,7 @@ it('opens every chapter with Expand all and closes them with Collapse all', asyn
   const user = userEvent.setup()
   render(<ChapterTree selectedId="ch01_getting_started/installation" />)
   await user.click(screen.getByRole('button', { name: 'Expand all' }))
-  expect(expanded()).toHaveLength(course.chapters.length)
+  expect(expanded()).toHaveLength(chapters.length)
   expect(screen.getByRole('link', { name: /21\.1/ })).toBeInTheDocument()
   expect(screen.getByRole('button', { name: 'Expand all' })).toBeDisabled()
   await user.click(screen.getByRole('button', { name: 'Collapse all' }))
@@ -73,4 +73,36 @@ it('expands the chapter being navigated into and keeps the previous one open', (
   expect(
     screen.getByRole('button', { name: /Getting Started/ }),
   ).toHaveAttribute('aria-expanded', 'true')
+})
+
+const patterns: Part[] = [
+  {
+    id: 'patterns',
+    title: 'Patterns & use cases',
+    chapters: [
+      {
+        id: 'patterns_errors',
+        title: 'Errors',
+        subchapters: [{ id: 'wrapping', title: 'Wrapping errors' }],
+      },
+    ],
+  },
+]
+
+it('shows one header per part', () => {
+  render(<ChapterTree selectedId="ch01_getting_started/installation" />)
+  expect(screen.getByText('Lessons')).toBeInTheDocument()
+  expect(screen.queryByText('Your Rust journey')).not.toBeInTheDocument()
+})
+
+it('renders unnumbered chapters and lessons without a number prefix', () => {
+  render(<ChapterTree selectedId="patterns_errors/wrapping" parts={patterns} />)
+  expect(screen.getByText('Patterns & use cases')).toBeInTheDocument()
+  const header = screen.getByRole('button', { name: /Errors/ })
+  expect(header).toHaveTextContent(/^Errors/)
+  expect(header).not.toHaveTextContent('undefined')
+  expect(within(header).getByLabelText('0 of 1 done')).toBeInTheDocument()
+  expect(
+    screen.getByRole('link', { name: 'Wrapping errors' }),
+  ).toHaveAttribute('href', '#patterns_errors/wrapping')
 })

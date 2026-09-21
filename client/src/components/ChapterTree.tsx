@@ -1,13 +1,25 @@
 import { useState } from 'react'
-import { course, type Chapter } from '../content'
+import { course, type Chapter, type Part } from '../content'
 import { useProgress } from '../progress'
 import ProgressRing from './ProgressRing'
 
-const allChapterIds = course.chapters.map((chapter) => chapter.id)
-const label = (chapter: Chapter) =>
-  chapter.id === 'appendix' ? 'A' : String(chapter.number)
+export function chapterLabel(chapter: Chapter) {
+  if (chapter.id === 'appendix') return `A. ${chapter.title}`
+  return chapter.number === undefined
+    ? chapter.title
+    : `${chapter.number}. ${chapter.title}`
+}
 
-export default function ChapterTree({ selectedId }: { selectedId: string }) {
+export default function ChapterTree({
+  selectedId,
+  parts = course.parts,
+}: {
+  selectedId: string
+  parts?: Part[]
+}) {
+  const allChapterIds = parts.flatMap((part) =>
+    part.chapters.map((chapter) => chapter.id),
+  )
   const chapterId = selectedId.split('/')[0]
   const { completed } = useProgress()
   const [open, setOpen] = useState(() => new Set([chapterId]))
@@ -45,16 +57,20 @@ export default function ChapterTree({ selectedId }: { selectedId: string }) {
           Collapse all
         </BulkButton>
       </div>
-      <p className="eyebrow mb-1 px-2">Your Rust journey</p>
-      {course.chapters.map((chapter) => (
-        <ChapterBlock
-          key={chapter.id}
-          chapter={chapter}
-          open={open.has(chapter.id)}
-          onToggle={() => toggle(chapter.id)}
-          selectedId={selectedId}
-          done={done}
-        />
+      {parts.map((part) => (
+        <div key={part.id} className="mb-4">
+          <p className="eyebrow mb-1 px-2">{part.title}</p>
+          {part.chapters.map((chapter) => (
+            <ChapterBlock
+              key={chapter.id}
+              chapter={chapter}
+              open={open.has(chapter.id)}
+              onToggle={() => toggle(chapter.id)}
+              selectedId={selectedId}
+              done={done}
+            />
+          ))}
+        </div>
       ))}
       <p className="mt-6 px-2 text-xs leading-relaxed text-muted">
         Progress is saved in this browser. Explore at your own pace.
@@ -112,7 +128,7 @@ function ChapterBlock({
       >
         <ProgressRing done={doneCount} total={chapter.subchapters.length} />
         <span className="min-w-0 flex-1">
-          {label(chapter)}. {chapter.title}
+          {chapterLabel(chapter)}
         </span>
         <span className="text-muted" aria-hidden="true">
           {open ? '▾' : '▸'}
@@ -139,7 +155,12 @@ function ChapterBlock({
                     {isDone ? '✓' : '·'}
                   </span>
                   <span className="min-w-0">
-                    <span className="font-mono">{sub.number}</span> {sub.title}
+                    {sub.number && (
+                      <>
+                        <span className="font-mono">{sub.number}</span>{' '}
+                      </>
+                    )}
+                    {sub.title}
                   </span>
                 </a>
               </li>

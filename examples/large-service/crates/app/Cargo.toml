@@ -1,0 +1,28 @@
+[package]
+name = "app"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+axum.workspace = true
+billing.workspace = true
+customers.workspace = true
+integrations.workspace = true
+observability.workspace = true
+orders.workspace = true
+reqwest.workspace = true
+tokio.workspace = true
+transport-http.workspace = true
+
+[dev-dependencies]
+demo-upstream.workspace = true
+http-body-util.workspace = true
+serde_json.workspace = true
+tower.workspace = true
+wiremock.workspace = true

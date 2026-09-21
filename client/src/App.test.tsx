@@ -30,7 +30,7 @@ it('loads without an API, navigates, saves progress and offers to continue after
     await user.click(
       screen.getByRole('button', { name: 'Mark lesson complete' }),
     )
-    expect(screen.getByText(/1 \/ 87/)).toBeInTheDocument()
+    expect(screen.getByText(/1 \/ 93/)).toBeInTheDocument()
     const navigation = screen.getByRole('navigation', {
       name: 'Lesson navigation',
     })
@@ -66,7 +66,7 @@ it('lists every chapter with its progress on the landing page', async () => {
     'href',
     '#appendix/a_keywords',
   )
-  expect(screen.getByText('1 / 87 lessons done')).toBeInTheDocument()
+  expect(screen.getByText('1 / 93 lessons done')).toBeInTheDocument()
   expect(
     screen.queryByRole('link', { name: /Start from the beginning/ }),
   ).not.toBeInTheDocument()
@@ -119,7 +119,7 @@ it('allows completion to be undone and exposes the mobile chapter menu state', a
   await userEvent.click(
     screen.getByRole('button', { name: /Completed · mark incomplete/ }),
   )
-  expect(screen.getByText(/0 \/ 87/)).toBeInTheDocument()
+  expect(screen.getByText(/0 \/ 93/)).toBeInTheDocument()
 })
 it('preserves the active trace step when quiz and completion progress change', async () => {
   window.history.replaceState(null, '', '/#ch04_ownership/what_is_ownership')
@@ -193,4 +193,20 @@ it('closes the mobile chapter drawer after choosing a lesson', async () => {
     screen.getByRole('button', { name: 'Toggle chapters' }),
   ).toHaveAttribute('aria-expanded', 'false')
   expect(document.getElementById('chapter-drawer')).toBeNull()
+})
+it('links to each part from the header and marks the current one', async () => {
+  window.history.replaceState(null, '', '/#ch03_common_concepts/data_types')
+  render(<App />)
+  await screen.findByRole('heading', { name: '3.2 Data Types' })
+  const nav = screen.getByRole('navigation', { name: 'Course parts' })
+  const link = within(nav).getByRole('link', { name: 'Lessons' })
+  expect(link).toHaveAttribute('href', '#ch01_getting_started/installation')
+  expect(link).toHaveAttribute('aria-current', 'true')
+})
+it('shows one card per part on the landing page', async () => {
+  render(<App />)
+  const parts = await screen.findByRole('region', { name: 'Parts' })
+  const card = within(parts).getByRole('link', { name: /Part 1.*Lessons/ })
+  expect(card).toHaveTextContent('87 lessons · 0 done')
+  expect(card).toHaveAttribute('href', '#ch01_getting_started/installation')
 })

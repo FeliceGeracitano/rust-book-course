@@ -26,3 +26,9 @@ client/public/course
 # Learner's working files — the canonical exercise lives in chapters/*/.exercise.rs;
 # src/lib.rs is prepared by scripts/prepare-exercises.mjs and edited freely, so we don't track it.
 chapters/*/src/lib.rs
+
+# Example workspaces keep their lockfiles; generated snippet sources are throwaway.
+!examples/large-service/Cargo.lock
+!examples/snippets/Cargo.lock
+examples/snippets/src/bin/
+examples/snippets/tests/

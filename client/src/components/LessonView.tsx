@@ -1,7 +1,13 @@
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import Markdown, { type Components } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { loadLesson, parseQuiz, parseTrace, type Lesson } from '../content'
+import {
+  loadLesson,
+  parseQuiz,
+  parseTrace,
+  partLabel,
+  type Lesson,
+} from '../content'
 import { markComplete, useProgress } from '../progress'
 import CodeBlock from './CodeBlock'
 import { Quiz, Trace } from './Discovery'
@@ -58,12 +64,17 @@ export default function LessonView({
 
   return (
     <div className="mx-auto max-w-3xl">
-      <p className="eyebrow mb-5">
+      <p className={`eyebrow ${lesson.sub.problem ? 'mb-2' : 'mb-5'}`}>
         {lesson.chapter.id === 'appendix'
           ? 'Reference'
-          : `Chapter ${lesson.chapter.number}`}{' '}
+          : lesson.part.id === 'lessons'
+            ? `Chapter ${lesson.chapter.number}`
+            : partLabel(lesson.part)}{' '}
         · {lesson.chapter.title}
       </p>
+      {lesson.sub.problem && (
+        <p className="mb-5 text-sm text-muted">{lesson.sub.problem}</p>
+      )}
       {error ? (
         <div role="alert">
           <p>Could not load this lesson. Your progress is still saved.</p>
@@ -83,6 +94,14 @@ export default function LessonView({
               {markdown}
             </Markdown>
           </article>
+          {lesson.sub.ref && (
+            <p className="mt-6 text-sm text-muted">
+              Source:{' '}
+              <a className="text-link" href={lesson.sub.ref}>
+                {lesson.sub.ref}
+              </a>
+            </p>
+          )}
           {Viz && (
             <details className="my-8">
               <summary className="cursor-pointer text-crab">

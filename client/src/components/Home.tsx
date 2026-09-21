@@ -47,8 +47,34 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {course.chapters.map((chapter) => {
+      <section aria-label="Parts" className="grid gap-4 sm:grid-cols-3">
+        {course.parts.map((part, index) => {
+          const own = lessons.filter((lesson) => lesson.part.id === part.id)
+          const done = own.filter((lesson) =>
+            progress.completed.includes(lesson.id),
+          ).length
+          return (
+            <a
+              key={part.id}
+              href={`#${own[0].id}`}
+              className="rounded-2xl border border-edge bg-ink-soft p-5 transition hover:border-crab"
+            >
+              <div className="text-xs uppercase tracking-wide text-muted">
+                Part {index + 1}
+              </div>
+              <div className="mt-1 text-lg font-semibold">{part.title}</div>
+              <div className="mt-2 text-sm text-muted">
+                {own.length} lessons · {done} done
+              </div>
+            </a>
+          )
+        })}
+      </section>
+      {course.parts.map((part) => (
+        <section key={part.id} className="mt-10">
+          <h2 className="eyebrow mb-3">{part.title}</h2>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {part.chapters.map((chapter) => {
           const ids = chapter.subchapters.map((sub) => `${chapter.id}/${sub.id}`)
           const done = ids.filter((id) => progress.completed.includes(id)).length
           return (
@@ -68,7 +94,9 @@ export default function Home() {
             </a>
           )
         })}
-      </section>
+          </div>
+        </section>
+      ))}
     </div>
   )
 }

@@ -3,25 +3,42 @@ import { z } from 'zod'
 
 const Subchapter = z.object({
   id: z.string().regex(/^[a-z0-9_]+$/),
-  number: z.string(),
+  number: z.string().optional(),
   title: z.string().min(1),
+  problem: z.string().min(1).optional(),
+  ref: z.string().url().optional(),
 })
 const Chapter = z.object({
   id: z.string().regex(/^[a-z0-9_]+$/),
-  number: z.number(),
+  number: z.number().optional(),
   title: z.string().min(1),
   subchapters: z.array(Subchapter).min(1),
 })
-export const course = z
-  .object({ title: z.string(), chapters: z.array(Chapter).min(1) })
-  .parse(manifest)
+const Part = z.object({
+  id: z.string().regex(/^[a-z0-9_]+$/),
+  title: z.string().min(1),
+  chapters: z.array(Chapter).min(1),
+})
+export const CourseSchema = z.object({
+  title: z.string(),
+  parts: z.array(Part).min(1),
+})
+export const course = CourseSchema.parse(manifest)
+export type Part = z.infer<typeof Part>
 export type Chapter = z.infer<typeof Chapter>
-export const lessons = course.chapters.flatMap((chapter) =>
-  chapter.subchapters.map((sub) => ({
-    chapter,
-    sub,
-    id: `${chapter.id}/${sub.id}`,
-  })),
+export const chapters = course.parts.flatMap((part) => part.chapters)
+export function partLabel(part: Part) {
+  return part.title === 'Patterns & use cases' ? 'Patterns' : part.title
+}
+export const lessons = course.parts.flatMap((part) =>
+  part.chapters.flatMap((chapter) =>
+    chapter.subchapters.map((sub) => ({
+      part,
+      chapter,
+      sub,
+      id: `${chapter.id}/${sub.id}`,
+    })),
+  ),
 )
 export type Lesson = (typeof lessons)[number]
 export const markdownFiles = import.meta.glob<string>(

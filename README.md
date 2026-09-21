@@ -14,12 +14,19 @@ npm ci
 npm run dev      # → http://localhost:5173
 npm test         # unit tests + content validation
 npm run build    # type-check + production build in client/dist
+npm run check:rust   # compile lesson snippets, verify excerpts, test the example (needs Rust 1.85+)
 ```
 
 ## What's inside
 
-- 87 lessons across all 21 Book chapters plus the appendix, each with a discovery
+Three parts, like [go-tour-course](https://github.com/FeliceGeracitano/go-tour-course):
+**Lessons** (the Book), **Patterns & use cases** (problem-first idiomatic Rust, including
+how to structure a large codebase), and **Toolchain** (the `cargo` command).
+
+- 87 Book lessons across all 21 chapters plus the appendix, each with a discovery
   question and explanatory feedback.
+- Pattern lessons backed by compile-checked snippets and a runnable modular-monolith
+  example, `examples/large-service/`, a ten-crate Cargo workspace with tests.
 - Five step-through traces (moves, borrowing, `?`, iterators, `Rc`) and interactive
   visualizations for ownership, collections, smart pointers, concurrency, and async.
   Traces illustrate authored examples; nothing is executed.
@@ -46,6 +53,8 @@ Exercises start with `todo!()` and fail until completed; each chapter has a `SOL
   blocks ([authoring guide](content/README.md))
 - `client/` — Vite + React app
 - `chapters/` — optional Rust exercises
+- `examples/large-service/` — runnable architecture example for the large-codebase chapter
+- `examples/snippets/` — pinned crate that `check:rust` compiles lesson snippets in
 - `docs/refactor-plan.md` — why the runner was replaced by a static site
 
 

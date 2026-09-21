@@ -8,7 +8,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check:rust": "node scripts/check-rust-examples.mjs"
   },
   "dependencies": {
     "framer-motion": "^12.40.0",
