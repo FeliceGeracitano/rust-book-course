@@ -27,6 +27,9 @@ export const course = CourseSchema.parse(manifest)
 export type Part = z.infer<typeof Part>
 export type Chapter = z.infer<typeof Chapter>
 export const chapters = course.parts.flatMap((part) => part.chapters)
+export function partLabel(part: Part) {
+  return part.title === 'Patterns & use cases' ? 'Patterns' : part.title
+}
 export const lessons = course.parts.flatMap((part) =>
   part.chapters.flatMap((chapter) =>
     chapter.subchapters.map((sub) => ({

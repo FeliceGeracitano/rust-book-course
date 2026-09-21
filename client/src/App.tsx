@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { course, lessons } from './content'
+import { course, lessons, partLabel } from './content'
 import { rememberLesson, useProgress } from './progress'
 import ChapterTree from './components/ChapterTree'
 import Home from './components/Home'
@@ -95,6 +95,22 @@ export default function App() {
           </a>
           <p className="text-xs text-muted">Read. Predict. Explore.</p>
         </div>
+        <nav aria-label="Course parts" className="hidden items-center gap-1 sm:flex">
+          {course.parts.map((part) => {
+            const first = lessons.find((item) => item.part.id === part.id)!
+            const current = lesson?.part.id === part.id
+            return (
+              <a
+                key={part.id}
+                href={`#${first.id}`}
+                aria-current={current || undefined}
+                className={`rounded-md px-2 py-1 text-sm ${current ? 'bg-rust/10 text-crab' : 'text-muted hover:text-paper'}`}
+              >
+                {partLabel(part)}
+              </a>
+            )
+          })}
+        </nav>
         <span className="ml-auto text-right text-xs text-muted">
           {completed} / {lessons.length}
           <span className="hidden sm:inline"> lessons complete</span>

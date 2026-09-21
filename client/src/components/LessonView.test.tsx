@@ -39,3 +39,25 @@ it('shows a local error for a malformed block without losing the lesson', async 
   )
   expect(screen.getByRole('heading', { name: 'Lesson' })).toBeInTheDocument()
 })
+it('shows the part, the problem, and the source for pattern lessons', async () => {
+  vi.mocked(loadLesson).mockResolvedValue('# Wrapping')
+  const lesson = {
+    ...lessons[0],
+    part: { id: 'patterns', title: 'Patterns & use cases', chapters: [] },
+    chapter: { id: 'patterns_errors', title: 'Errors', subchapters: [] },
+    sub: {
+      id: 'wrapping',
+      title: 'Wrapping',
+      problem: 'Add context without losing the cause.',
+      ref: 'https://docs.rs/anyhow',
+    },
+  }
+  render(<LessonView lesson={lesson} />)
+  expect(screen.getByText('Patterns · Errors')).toBeInTheDocument()
+  expect(
+    screen.getByText('Add context without losing the cause.'),
+  ).toBeInTheDocument()
+  expect(
+    await screen.findByRole('link', { name: /docs\.rs\/anyhow/ }),
+  ).toHaveAttribute('href', 'https://docs.rs/anyhow')
+})
