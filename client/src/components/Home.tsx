@@ -1,4 +1,4 @@
-import { course, lessons, type Chapter } from '../content'
+import { chapters, course, lessons, type Chapter } from '../content'
 import { useProgress } from '../progress'
 import ProgressRing from './ProgressRing'
 
@@ -48,7 +48,7 @@ export default function Home() {
         </div>
       </section>
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {course.chapters.map((chapter) => {
+        {chapters.map((chapter) => {
           const ids = chapter.subchapters.map((sub) => `${chapter.id}/${sub.id}`)
           const done = ids.filter((id) => progress.completed.includes(id)).length
           return (

@@ -2,7 +2,7 @@ import { beforeEach, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import ChapterTree from './ChapterTree'
-import { course } from '../content'
+import { chapters } from '../content'
 import { markComplete, reloadProgress } from '../progress'
 
 beforeEach(() => {
@@ -33,7 +33,7 @@ it('shows a progress ring per chapter', () => {
   render(<ChapterTree selectedId="ch01_getting_started/installation" />)
   expect(screen.getByLabelText('1 of 3 done')).toBeInTheDocument()
   expect(screen.getAllByLabelText(/^\d+ of \d+ done$/)).toHaveLength(
-    course.chapters.length,
+    chapters.length,
   )
 })
 
@@ -41,7 +41,7 @@ it('opens every chapter with Expand all and closes them with Collapse all', asyn
   const user = userEvent.setup()
   render(<ChapterTree selectedId="ch01_getting_started/installation" />)
   await user.click(screen.getByRole('button', { name: 'Expand all' }))
-  expect(expanded()).toHaveLength(course.chapters.length)
+  expect(expanded()).toHaveLength(chapters.length)
   expect(screen.getByRole('link', { name: /21\.1/ })).toBeInTheDocument()
   expect(screen.getByRole('button', { name: 'Expand all' })).toBeDisabled()
   await user.click(screen.getByRole('button', { name: 'Collapse all' }))

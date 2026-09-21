@@ -4,11 +4,13 @@ import remarkParse from 'remark-parse'
 import type { Root, RootContent } from 'mdast'
 import {
   course,
+  chapters,
   lessons,
   markdownFiles,
   loadLesson,
   parseQuiz,
   parseTrace,
+  CourseSchema,
 } from './content'
 
 function blocks(markdown: string) {
@@ -23,17 +25,52 @@ function blocks(markdown: string) {
 }
 
 describe('published curriculum', () => {
-  it('preserves all 87 lessons with unique stable paths and no orphaned content', () => {
-    expect(course.chapters).toHaveLength(22)
+  it('groups the 87 Book lessons under one Lessons part with unchanged ids', () => {
+    expect(course.parts.map((part) => part.id)).toEqual(['lessons'])
+    expect(course.parts[0].title).toBe('Lessons')
+    expect(chapters).toHaveLength(22)
     expect(lessons).toHaveLength(87)
-    expect(new Set(course.chapters.map((ch) => ch.id)).size).toBe(
-      course.chapters.length,
-    )
+    expect(lessons.every((l) => l.part.id === 'lessons')).toBe(true)
+    expect(lessons[0].id).toBe('ch01_getting_started/installation')
+    expect(lessons[86].id).toBe('appendix/g_nightly')
+    expect(new Set(chapters.map((ch) => ch.id)).size).toBe(chapters.length)
     expect(new Set(lessons.map((l) => l.id)).size).toBe(lessons.length)
     const paths = Object.keys(markdownFiles)
       .filter((path) => !path.endsWith('/README.md'))
       .sort()
     expect(paths).toEqual(lessons.map((l) => `../../content/${l.id}.md`).sort())
+  })
+  it('accepts unnumbered chapters with problem and ref, and rejects bad refs', () => {
+    const part = {
+      id: 'patterns',
+      title: 'Patterns & use cases',
+      chapters: [
+        {
+          id: 'patterns_errors',
+          title: 'Errors',
+          subchapters: [
+            {
+              id: 'wrapping',
+              title: 'Wrapping',
+              problem: 'Add context.',
+              ref: 'https://docs.rs/anyhow',
+            },
+          ],
+        },
+      ],
+    }
+    expect(() =>
+      CourseSchema.parse({ title: 'x', parts: [part] }),
+    ).not.toThrow()
+    const bad = structuredClone(part)
+    bad.chapters[0].subchapters[0].ref = 'not a url'
+    expect(() => CourseSchema.parse({ title: 'x', parts: [bad] })).toThrow()
+    expect(() =>
+      CourseSchema.parse({
+        title: 'x',
+        parts: [{ id: 'p', title: 'P', chapters: [] }],
+      }),
+    ).toThrow()
   })
   it.each(lessons)(
     '$id loads with valid interactive discovery content',

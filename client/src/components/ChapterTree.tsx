@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { course, type Chapter } from '../content'
+import { chapters, type Chapter } from '../content'
 import { useProgress } from '../progress'
 import ProgressRing from './ProgressRing'
 
-const allChapterIds = course.chapters.map((chapter) => chapter.id)
+const allChapterIds = chapters.map((chapter) => chapter.id)
 const label = (chapter: Chapter) =>
   chapter.id === 'appendix' ? 'A' : String(chapter.number)
 
@@ -46,7 +46,7 @@ export default function ChapterTree({ selectedId }: { selectedId: string }) {
         </BulkButton>
       </div>
       <p className="eyebrow mb-1 px-2">Your Rust journey</p>
-      {course.chapters.map((chapter) => (
+      {chapters.map((chapter) => (
         <ChapterBlock
           key={chapter.id}
           chapter={chapter}
