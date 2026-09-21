@@ -1,7 +1,7 @@
 [workspace]
 resolver = "2"
 members = ["crates/*"]
-default-members = ["crates/money"]
+default-members = ["crates/api"]
 
 [workspace.package]
 version = "0.1.0"
